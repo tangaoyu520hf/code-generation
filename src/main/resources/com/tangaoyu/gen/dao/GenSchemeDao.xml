@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tangaoyu.gen.dao.GenSchemeDao">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.tangaoyu.gen.model.GenScheme">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+		<result column="category" property="category" />
+		<result column="package_name" property="packageName" />
+		<result column="module_name" property="moduleName" />
+		<result column="sub_module_name" property="subModuleName" />
+		<result column="function_name" property="functionName" />
+		<result column="function_name_simple" property="functionNameSimple" />
+		<result column="function_author" property="functionAuthor" />
+		<result column="gen_table_id" property="genTableId" />
+		<result column="create_by" property="createBy" />
+		<result column="create_date" property="createDate" />
+		<result column="update_by" property="updateBy" />
+		<result column="update_date" property="updateDate" />
+		<result column="remarks" property="remarks" />
+		<result column="del_flag" property="delFlag" />
+	</resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, category, package_name AS packageName, module_name AS moduleName, sub_module_name AS subModuleName, function_name AS functionName, function_name_simple AS functionNameSimple, function_author AS functionAuthor, gen_table_id AS genTableId, create_by AS createBy, create_date AS createDate, update_by AS updateBy, update_date AS updateDate, remarks, del_flag AS delFlag
+    </sql>
+
+</mapper>

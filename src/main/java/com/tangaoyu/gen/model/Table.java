@@ -4,11 +4,10 @@ import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -30,6 +29,7 @@ public class Table extends Model<Table> {
     /**
      * 名称
      */
+	@Length(min=1, max=200)
 	private String name;
     /**
      * 描述
@@ -88,9 +88,17 @@ public class Table extends Model<Table> {
 		return "mysql";
 	}
 
+	@TableField(exist = false)
 	private List<TableColumn> columnList = new ArrayList<>();	// 表列
 
+	@TableField(exist = false)
 	private List<String> pkList; // 当前表主键列表
+
+	@TableField(exist = false)
+	private Table parent;	// 父表对象
+
+	@TableField(exist = false)
+	private List<Table> childList = Collections.EMPTY_LIST;   // 子表列表
 
 	public String getId() {
 		return id;
@@ -202,6 +210,24 @@ public class Table extends Model<Table> {
 
 	public void setPkList(List<String> pkList) {
 		this.pkList = pkList;
+	}
+
+	@JsonIgnore
+	public Table getParent() {
+		return parent;
+	}
+
+	public void setParent(Table parent) {
+		this.parent = parent;
+	}
+
+	@JsonIgnore
+	public List<Table> getChildList() {
+		return childList;
+	}
+
+	public void setChildList(List<Table> childList) {
+		this.childList = childList;
 	}
 
 	@Override

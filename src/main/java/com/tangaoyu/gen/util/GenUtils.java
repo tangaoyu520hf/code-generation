@@ -3,13 +3,17 @@
  */
 package com.tangaoyu.gen.util;
 
-import com.tangaoyu.gen.model.Table;
-import com.tangaoyu.gen.model.TableColumn;
+import com.tangaoyu.gen.model.*;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 
-import java.io.File;
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 代码生成工具类
@@ -31,7 +35,7 @@ public class GenUtils {
 			if (StringUtils.isNotBlank(column.getId())){
 				continue;
 			}
-			
+
 			// 设置字段说明
 			if (StringUtils.isBlank(column.getComments())){
 				column.setComments(column.getName());
@@ -94,11 +98,16 @@ public class GenUtils {
 					|| StringUtils.equalsIgnoreCase(column.getName(), "title")){
 				column.setIsQuery("1");
 			}
-			
+
 			// 查询字段类型
 			if (StringUtils.equalsIgnoreCase(column.getName(), "name")
 					|| StringUtils.equalsIgnoreCase(column.getName(), "title")){
 				column.setQueryType("like");
+			}
+
+			// 查询字段类型
+			if (StringUtils.isEmpty(column.getQueryType())){
+				column.setQueryType("=");
 			}
 
 			// 设置特定类型和字段名
@@ -172,22 +181,30 @@ public class GenUtils {
 
 		return "";
 	}
-	
+
+	/**
+	 * 获取代码生成配置对象
+	 * @return
+	 */
+	public static GenConfig getConfig(){
+		return fileToObject("config.xml", GenConfig.class);
+	}
+
 	/**
 	 * XML文件转换为对象
 	 * @param fileName
 	 * @param clazz
 	 * @return
-	 *//*
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T fileToObject(String fileName, Class<?> clazz){
 		try {
 			String pathName = "/templates/modules/gen/" + fileName;
 //			logger.debug("File to object: {}", pathName);
-			Resource resource = new ClassPathResource(pathName); 
+			Resource resource = new ClassPathResource(pathName);
 			InputStream is = resource.getInputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-			StringBuilder sb = new StringBuilder();  
+			StringBuilder sb = new StringBuilder();
 			while (true) {
 				String line = br.readLine();
 				if (line == null){
@@ -206,143 +223,108 @@ public class GenUtils {
 		} catch (IOException e) {
 			logger.warn("Error file convert: {}", e.getMessage());
 		}
-//		String pathName = StringUtils.replace(getTemplatePath() + "/" + fileName, "/", File.separator);
-//		logger.debug("file to object: {}", pathName);
-//		String content = "";
-//		try {
-//			content = FileUtils.readFileToString(new File(pathName), "utf-8");
-////			logger.debug("read config content: {}", content);
-//			return (T) JaxbMapper.fromXml(content, clazz);
-//		} catch (IOException e) {
-//			logger.warn("error convert: {}", e.getMessage());
-//		}
 		return null;
 	}
-	
-	*//**
-	 * 获取代码生成配置对象
-	 * @return
-	 *//*
-	public static GenConfig getConfig(){
-		return fileToObject("config.xml", GenConfig.class);
-	}
 
-	*//**
+
+	/**
 	 * 根据分类获取模板列表
-	 * @param config
 	 * @param category
 	 * @param isChildTable 是否是子表
 	 * @return
-	 *//*
-	public static List<GenTemplate> getTemplateList(GenConfig config, String category, boolean isChildTable){
-		List<GenTemplate> templateList = Lists.newArrayList();
-		if (config !=null && config.getCategoryList() != null && category !=  null){
-			for (GenCategory e : config.getCategoryList()){
-				if (category.equals(e.getValue())){
-					List<String> list = null;
-					if (!isChildTable){
-						list = e.getTemplate();
-					}else{
-						list = e.getChildTableTemplate();
-					}
-					if (list != null){
-						for (String s : list){
-							if (StringUtils.startsWith(s, GenCategory.CATEGORY_REF)){
-								templateList.addAll(getTemplateList(config, StringUtils.replace(s, GenCategory.CATEGORY_REF, ""), false));
-							}else{
+	 */
+	public static List<GenTemplate> getTemplateList(String category, boolean isChildTable){
+		GenConfig config = getConfig();
+		if (CollectionUtils.isNotEmpty(config.getCategoryList())  && StringUtils.isNotBlank(category)){
+			List<GenTemplate> genTemplates = config.getCategoryList().stream().filter(
+					genCategory -> category.equals(genCategory.getValue()))
+					.flatMap(genCategory -> {
+						List<String> list = isChildTable ? genCategory.getChildTableTemplate() : genCategory.getTemplate();
+						List<GenTemplate> templateList = new ArrayList<>();
+						list.stream().forEach(s -> {
+							if (StringUtils.startsWith(s, GenCategory.CATEGORY_REF)) {
+								templateList.addAll(getTemplateList(StringUtils.replace(s, GenCategory.CATEGORY_REF, ""), false));
+							} else {
 								GenTemplate template = fileToObject(s, GenTemplate.class);
-								if (template != null){
+								if (template != null) {
 									templateList.add(template);
 								}
 							}
-						}
-					}
-					break;
-				}
-			}
+						});
+						return templateList.stream();
+					}).collect(Collectors.toList());
+			return genTemplates;
 		}
-		return templateList;
+		return Collections.EMPTY_LIST;
 	}
-	
-	*//**
+
+	/**
 	 * 获取数据模型
 	 * @param genScheme
 	 * @return
-	 *//*
+	 */
 	public static Map<String, Object> getDataModel(GenScheme genScheme){
-		Map<String, Object> model = Maps.newHashMap();
-		
+		Map<String, Object> model = new HashMap<>();
+
 		model.put("packageName", StringUtils.lowerCase(genScheme.getPackageName()));
 		model.put("lastPackageName", StringUtils.substringAfterLast((String)model.get("packageName"),"."));
 		model.put("moduleName", StringUtils.lowerCase(genScheme.getModuleName()));
 		model.put("subModuleName", StringUtils.lowerCase(genScheme.getSubModuleName()));
-		model.put("className", StringUtils.uncapitalize(genScheme.getTable().getClassName()));
-		model.put("ClassName", StringUtils.capitalize(genScheme.getTable().getClassName()));
-		
+		model.put("className", StringUtils.uncapitalize(genScheme.getGenTable().getClassName()));
+		model.put("ClassName", StringUtils.capitalize(genScheme.getGenTable().getClassName()));
+
 		model.put("functionName", genScheme.getFunctionName());
 		model.put("functionNameSimple", genScheme.getFunctionNameSimple());
-		model.put("functionAuthor", StringUtils.isNotBlank(genScheme.getFunctionAuthor())?genScheme.getFunctionAuthor():UserUtils.getUser().getName());
+		model.put("functionAuthor", genScheme.getFunctionAuthor());
 		model.put("functionVersion", DateUtils.getDate());
-		
+
 		model.put("urlPrefix", model.get("moduleName")+(StringUtils.isNotBlank(genScheme.getSubModuleName())
 				?"/"+StringUtils.lowerCase(genScheme.getSubModuleName()):"")+"/"+model.get("className"));
 		model.put("viewPrefix", //StringUtils.substringAfterLast(model.get("packageName"),".")+"/"+
 				model.get("urlPrefix"));
 		model.put("permissionPrefix", model.get("moduleName")+(StringUtils.isNotBlank(genScheme.getSubModuleName())
 				?":"+StringUtils.lowerCase(genScheme.getSubModuleName()):"")+":"+model.get("className"));
-		
-		model.put("dbType", Global.getConfig("jdbc.type"));
 
-		model.put("table", genScheme.getTable());
-		
+		model.put("dbType", "mysql");
+
+		model.put("table", genScheme.getGenTable());
+
 		return model;
 	}
-	
-	*//**
+
+	/**
 	 * 生成到文件
 	 * @param tpl
 	 * @param model
 	 * @param isReplaceFile
 	 * @return
-	 *//*
+	 */
 	public static String generateToFile(GenTemplate tpl, Map<String, Object> model, boolean isReplaceFile){
 		// 获取生成文件
-		String fileName = Global.getProjectPath() + File.separator 
-				+ StringUtils.replaceEach(FreeMarkers.renderString(tpl.getFilePath() + "/", model), 
-						new String[]{"//", "/", "."}, new String[]{File.separator, File.separator, File.separator})
+		String fileName = FileUtils.getProjectPath() + File.separator
+				+ StringUtils.replaceEach(FreeMarkers.renderString(tpl.getFilePath() + "/", model),
+				new String[]{"//", "/", "."}, new String[]{File.separator, File.separator, File.separator})
 				+ FreeMarkers.renderString(tpl.getFileName(), model);
 		logger.debug(" fileName === " + fileName);
 
 		// 获取生成文件内容
 		String content = FreeMarkers.renderString(StringUtils.trimToEmpty(tpl.getContent()), model);
 		logger.debug(" content === \r\n" + content);
-		
+
 		// 如果选择替换文件，则删除原文件
 		if (isReplaceFile){
 			FileUtils.deleteFile(fileName);
 		}
-		
+
 		// 创建并写入文件
-		if (FileUtils.createFile(fileName)){
+/*		if (FileUtils.createFile(fileName)){
 			FileUtils.writeToFile(fileName, content, true);
 			logger.debug(" file create === " + fileName);
 			return "生成成功："+fileName+"<br/>";
 		}else{
 			logger.debug(" file extents === " + fileName);
 			return "文件已存在："+fileName+"<br/>";
-		}
+		}*/
+		return "文件已存在："+fileName+"<br/>";
 	}
-	
-	public static void main(String[] args) {
-		try {
-			BigDecimal bigDecimal = new BigDecimal(5);
-			BigDecimal bigDecimal2 = new BigDecimal(1);
-			GenConfig config = getConfig();
-			System.out.println(bigDecimal.compareTo(bigDecimal2));
-			*//*System.out.println(JaxbMapper.toXml(config));*//*
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}*/
-	
 }

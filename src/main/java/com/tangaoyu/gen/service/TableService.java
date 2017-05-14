@@ -17,5 +17,23 @@ public interface TableService extends IService<Table> {
 
     List<Table> findTableListFormDb(Table table);
 
-    Table getTableFormDb(Table table);
+    /**
+     * 获取表及表中行数据（从数据库中查）
+     * @param table
+     * @return
+     */
+    Table getTableAndColumnFormDb(Table table);
+
+    /**
+     * 保存table表及列到表中
+     * @param genTable
+     */
+    void insertAndSaveClounm(Table genTable);
+
+    /**
+     * 获取表及相关字段信息
+     * @param id
+     * @return
+     */
+    public Table getTableAndColumnsById(String id);
 }
