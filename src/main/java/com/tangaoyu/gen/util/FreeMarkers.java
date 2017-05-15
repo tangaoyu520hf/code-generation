@@ -20,6 +20,16 @@ import java.util.Map;
  */
 public class FreeMarkers {
 
+	private static Configuration configuration;
+
+	static {
+		try {
+			configuration = buildConfiguration("classpath:/");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static String renderString(String templateString, Map<String, ?> model) {
 		try {
 			StringWriter result = new StringWriter();
@@ -37,6 +47,15 @@ public class FreeMarkers {
 			template.process(model, result);
 			return result.toString();
 		} catch (Exception e) {
+			throw Exceptions.unchecked(e);
+		}
+	}
+
+	public static String renderTemplate(String path, Object model) {
+		try {
+			Template template = configuration.getTemplate(path);
+			return renderTemplate(template,model);
+		} catch (IOException e) {
 			throw Exceptions.unchecked(e);
 		}
 	}

@@ -1,11 +1,15 @@
 package com.tangaoyu.gen.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.tangaoyu.gen.util.StringUtils;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -136,6 +140,9 @@ public class TableColumn extends Model<TableColumn> {
      */
 	@TableField("del_flag")
 	private String delFlag;
+
+	@TableField(exist = false)
+	private Table genTable;	// 归属表
 
 
 	public String getId() {
@@ -329,6 +336,134 @@ public class TableColumn extends Model<TableColumn> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
+
+	public Table getGenTable() {
+		return genTable;
+	}
+
+	public void setGenTable(Table genTable) {
+		this.genTable = genTable;
+	}
+
+	/**
+	 * 获取简写Java类型
+	 * @return
+	 */
+	public String getSimpleJavaType(){
+		if ("This".equals(getJavaType())){
+			return StringUtils.capitalize(genTable.getClassName());
+		}
+		return StringUtils.indexOf(getJavaType(), ".") != -1
+				? StringUtils.substringAfterLast(getJavaType(), ".")
+				: getJavaType();
+	}
+
+	/**
+	 * 获取简写Java字段
+	 * @return
+	 */
+	public String getSimpleJavaField(){
+		return StringUtils.substringBefore(getJavaField(), ".");
+	}
+
+	/**
+	 * 获取Java字段，如果是对象，则获取对象.附加属性1
+	 * @return
+	 */
+	public String getJavaFieldId(){
+		return StringUtils.substringBefore(getJavaField(), "|");
+	}
+
+	/**
+	 * 获取Java字段，如果是对象，则获取对象.附加属性2
+	 * @return
+	 */
+	public String getJavaFieldName(){
+		String[][] ss = getJavaFieldAttrs();
+		return ss.length>0 ? getSimpleJavaField()+"."+ss[0][0] : "";
+	}
+
+	/**
+	 * 获取Java字段，所有属性名
+	 * @return
+	 */
+	public String[][] getJavaFieldAttrs(){
+		String[] ss = StringUtils.split(StringUtils.substringAfter(getJavaField(), "|"), "|");
+		String[][] sss = new String[ss.length][2];
+		if (ss!=null){
+			for (int i=0; i<ss.length; i++){
+				sss[i][0] = ss[i];
+				sss[i][1] = StringUtils.toUnderScoreCase(ss[i]);
+			}
+		}
+		return sss;
+	}
+
+	/**
+	 * 获取字符串长度
+	 * @return
+	 */
+	public String getDataLength(){
+		String[] ss = StringUtils.split(StringUtils.substringBetween(getJdbcType(), "(", ")"), ",");
+		if (ss != null && ss.length == 1){// && "String".equals(getJavaType())){
+			return ss[0];
+		}
+		return "0";
+	}
+
+	/**
+	 * 获取列注解列表
+	 * @return
+	 */
+	public List<String> getAnnotationList(){
+		List<String> list = new ArrayList<>();
+		// 导入Jackson注解
+		if ("This".equals(getJavaType())){
+			list.add("com.fasterxml.jackson.annotation.JsonBackReference");
+		}
+		if ("java.util.Date".equals(getJavaType())){
+			list.add("com.fasterxml.jackson.annotation.JsonFormat(pattern = \"yyyy-MM-dd HH:mm:ss\")");
+		}
+		// 导入JSR303验证依赖包
+		if (!"1".equals(getIsNull()) && !"String".equals(getJavaType())){
+			list.add("javax.validation.constraints.NotNull(message=\""+getComments()+"不能为空\")");
+		}
+		else if (!"1".equals(getIsNull()) && "String".equals(getJavaType()) && !"0".equals(getDataLength())){
+			list.add("org.hibernate.validator.constraints.Length(min=1, max="+getDataLength()
+					+", message=\""+getComments()+"长度必须介于 1 和 "+getDataLength()+" 之间\")");
+		}
+		else if ("String".equals(getJavaType()) && !"0".equals(getDataLength())){
+			list.add("org.hibernate.validator.constraints.Length(min=0, max="+getDataLength()
+					+", message=\""+getComments()+"长度必须介于 0 和 "+getDataLength()+" 之间\")");
+		}
+		return list;
+	}
+
+	/**
+	 * 获取简写列注解列表
+	 * @return
+	 */
+	public List<String> getSimpleAnnotationList(){
+		List<String> list = new ArrayList<>();
+		for (String ann : getAnnotationList()){
+			list.add(StringUtils.substringAfterLast(ann, "."));
+		}
+		return list;
+	}
+
+
+	/**
+	 * 是否是基类字段
+	 * @return
+	 */
+	public Boolean getIsNotBaseField(){
+		return!StringUtils.equals(getSimpleJavaField(), "updateTime")
+				&& !StringUtils.equals(getSimpleJavaField(), "updateId")
+				&& !StringUtils.equals(getSimpleJavaField(), "createTime")
+				&& !StringUtils.equals(getSimpleJavaField(), "createId")
+				&& !StringUtils.equals(getSimpleJavaField(), "deleteFlag");
+	}
+
 
 	@Override
 	protected Serializable pkVal() {

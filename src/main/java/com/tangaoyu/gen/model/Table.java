@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tangaoyu.gen.util.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
@@ -99,6 +100,8 @@ public class Table extends Model<Table> {
 
 	@TableField(exist = false)
 	private List<Table> childList = Collections.EMPTY_LIST;   // 子表列表
+	@TableField(exist = false)
+	private TableColumn tableColumnPk;
 
 	public String getId() {
 		return id;
@@ -229,6 +232,56 @@ public class Table extends Model<Table> {
 	public void setChildList(List<Table> childList) {
 		this.childList = childList;
 	}
+
+	public TableColumn getTableColumnPk() {
+		List<TableColumn> columnList = this.getColumnList();
+		Optional<TableColumn> first = columnList.stream().filter(tableColumn -> tableColumn.getIsPk().equals("1")).findFirst();
+		return first.orElse(null);
+	}
+
+
+	public void setTableColumnPk(TableColumn tableColumnPk) {
+		this.tableColumnPk = tableColumnPk;
+	}
+
+	/**
+	 * 获取导入依赖包字符串
+	 * @return
+	 */
+	public List<String> getImportList(){
+		Set<String> importList = new HashSet<>(); // 引用列表
+
+		importList.add("com.baomidou.mybatisplus.activerecord.Model");
+		importList.add("com.baomidou.mybatisplus.annotations.TableName");
+
+		importList.add("com.baomidou.mybatisplus.annotations.TableId");
+		importList.add("com.baomidou.mybatisplus.annotations.TableField");
+		importList.add("import java.io.Serializable;");
+
+		for (TableColumn column : getColumnList()){
+			if (("1".equals(column.getIsQuery()) && "between".equals(column.getQueryType())
+					||!column.getIsNotBaseField())){
+				// 导入类型依赖包， 如果类型中包含“.”，则需要导入引用。
+				if (StringUtils.indexOf(column.getJavaType(), ".") != -1 && !importList.contains(column.getJavaType())){
+					importList.add(column.getJavaType());
+				}
+			}
+			// 导入JSR303、Json等依赖包
+			for (String ann : column.getAnnotationList()){
+				if (!importList.contains(StringUtils.substringBeforeLast(ann, "("))){
+					importList.add(StringUtils.substringBeforeLast(ann, "("));
+				}
+			}
+		}
+		// 如果有子表，则需要导入List相关引用
+		if (getChildList() != null && getChildList().size() > 0){
+			if (!importList.contains("java.util.List")){
+				importList.add("java.util.List");
+			}
+		}
+		return new ArrayList(importList);
+	}
+
 
 	@Override
 	protected Serializable pkVal() {

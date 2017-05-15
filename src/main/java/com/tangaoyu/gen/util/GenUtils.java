@@ -24,6 +24,11 @@ public class GenUtils {
 
 	private static Logger logger = LoggerFactory.getLogger(GenUtils.class);
 
+	public static final String SUPERD_MAPPER_CLASS = "com.baomidou.mybatisplus.mapper.BaseMapper";
+	public static final String SUPERD_SERVICE_CLASS = "com.baomidou.mybatisplus.service.IService";
+	public static final String SUPERD_SERVICEIMPL_CLASS = "com.baomidou.mybatisplus.service.impl.ServiceImpl";
+
+
 	/**
 	 * 初始化列属性字段
 	 * @param genTable
@@ -289,6 +294,21 @@ public class GenUtils {
 
 		model.put("table", genScheme.getGenTable());
 
+		/*dao包*/
+		model.put("superMapperClassPackage",GenUtils.SUPERD_MAPPER_CLASS);
+		model.put("superMapperClass", StringUtils.substringAfterLast(GenUtils.SUPERD_MAPPER_CLASS,"."));
+
+		/*service包*/
+		model.put("superServiceClassPackage",GenUtils.SUPERD_SERVICE_CLASS);
+		model.put("superServiceClass", StringUtils.substringAfterLast(GenUtils.SUPERD_SERVICE_CLASS,"."));
+
+		/*service实现包*/
+		model.put("superServiceImplClassPackage",GenUtils.SUPERD_SERVICEIMPL_CLASS);
+		model.put("superServiceImplClass", StringUtils.substringAfterLast(GenUtils.SUPERD_SERVICEIMPL_CLASS,"."));
+
+
+		model.put("baseResultMap",true);
+
 		return model;
 	}
 
@@ -300,31 +320,36 @@ public class GenUtils {
 	 * @return
 	 */
 	public static String generateToFile(GenTemplate tpl, Map<String, Object> model, boolean isReplaceFile){
+
+/*		model.put("currPkg",FreeMarkers.renderString(tpl.getFilePath(), model).replace("/","."));
+		model.put("currClassName",StringUtils.substringBefore(FreeMarkers.renderString(tpl.getFileName(), model),"."));*/
+
 		// 获取生成文件
-		String fileName = FileUtils.getProjectPath() + File.separator
+		String fileName =FileUtils.getProjectPath() + File.separator
 				+ StringUtils.replaceEach(FreeMarkers.renderString(tpl.getFilePath() + "/", model),
 				new String[]{"//", "/", "."}, new String[]{File.separator, File.separator, File.separator})
 				+ FreeMarkers.renderString(tpl.getFileName(), model);
 		logger.debug(" fileName === " + fileName);
 
+		String content = "";
 		// 获取生成文件内容
-		String content = FreeMarkers.renderString(StringUtils.trimToEmpty(tpl.getContent()), model);
+		if(StringUtils.isNotBlank(tpl.getContentPath())){
+			content = FreeMarkers.renderTemplate(tpl.getContentPath(),model);
+		}
 		logger.debug(" content === \r\n" + content);
-
 		// 如果选择替换文件，则删除原文件
 		if (isReplaceFile){
 			FileUtils.deleteFile(fileName);
 		}
 
 		// 创建并写入文件
-/*		if (FileUtils.createFile(fileName)){
+		if (FileUtils.createFile(fileName)){
 			FileUtils.writeToFile(fileName, content, true);
 			logger.debug(" file create === " + fileName);
 			return "生成成功："+fileName+"<br/>";
 		}else{
 			logger.debug(" file extents === " + fileName);
 			return "文件已存在："+fileName+"<br/>";
-		}*/
-		return "文件已存在："+fileName+"<br/>";
+		}
 	}
 }

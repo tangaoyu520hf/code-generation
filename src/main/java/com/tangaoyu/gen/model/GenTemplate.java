@@ -27,6 +27,7 @@ public class GenTemplate{
 	private String filePath;		// 生成文件路径
 	private String fileName;		// 文件名
 	private String content;		// 内容
+	private String contentPath; //内容路径
 
 	public GenTemplate() {
 		super();
@@ -72,7 +73,15 @@ public class GenTemplate{
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	
+
+	public String getContentPath() {
+		return contentPath;
+	}
+
+	public void setContentPath(String contentPath) {
+		this.contentPath = contentPath;
+	}
+
 	@XmlTransient
 	public List<String> getCategoryList() {
 		if (category == null){
