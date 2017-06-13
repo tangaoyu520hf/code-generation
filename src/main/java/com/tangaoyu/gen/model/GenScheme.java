@@ -4,6 +4,8 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
+
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -22,6 +24,7 @@ public class GenScheme extends Model<GenScheme> {
     /**
      * 编号
      */
+    @NotNull
 	private String id;
     /**
      * 名称

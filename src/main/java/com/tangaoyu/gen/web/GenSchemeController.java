@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class GenSchemeController {
     private TableColumnService tableColumnService;
 
     @GetMapping("page")
-    public ResponseEntity page(GenScheme genScheme, Page page) {
+    public ResponseEntity page(@NotNull Integer age, @Validated GenScheme genScheme, Page page) {
         page = genSchemeService.selectPage(page,new EntityWrapper<>(genScheme));
         return ResponseEntity.ok().body(page);
     }
