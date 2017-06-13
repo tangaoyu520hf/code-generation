@@ -110,6 +110,7 @@ public class TableServiceImpl extends ServiceImpl<TableDao, Table> implements Ta
         EntityWrapper<TableColumn> tableColumnEntityWrapper = new EntityWrapper<>(tableColumn);
         tableColumnEntityWrapper.orderBy("sort",true);
         List<TableColumn> tableColumns = tableColumnService.selectList(tableColumnEntityWrapper);
+        tableColumns.forEach(tableColumn1 -> tableColumn1.setGenTable(table));
         table.setColumnList(tableColumns);
         return table;
     }

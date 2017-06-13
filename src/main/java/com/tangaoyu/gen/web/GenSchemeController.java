@@ -80,6 +80,21 @@ public class GenSchemeController {
     }
 
     /**
+     * 生成代码
+     * @param genScheme
+     * @return
+     */
+    @GetMapping("generateCode")
+    public ResponseEntity generateTheCode(GenScheme genScheme){
+        GenScheme queryGenScheme = genSchemeService.selectById(genScheme.getId());
+        queryGenScheme.setGen(genScheme.getGen());
+        //生成代码
+        generateCode(queryGenScheme);
+        return ResponseEntity.ok().body(null);
+    }
+
+
+    /**
      * 代码生成
      * @param genScheme
      * @return
@@ -91,12 +106,9 @@ public class GenSchemeController {
         // 查询主表及字段列
         Table genTable = tableService.getTableAndColumnsById(genScheme.getGenTableId());
 
-        // 获取所有代码模板
-        GenConfig config = GenUtils.getConfig();
-
         // 获取模板列表
         List<GenTemplate> templateList = GenUtils.getTemplateList(genScheme.getCategory(), false);
-        List<GenTemplate> childTableTemplateList = GenUtils.getTemplateList(genScheme.getCategory(), true);
+/*        List<GenTemplate> childTableTemplateList = GenUtils.getTemplateList(genScheme.getCategory(), true);
 
         // 如果有子表模板，则需要获取子表列表
         if (childTableTemplateList.size() > 0){
@@ -115,7 +127,7 @@ public class GenSchemeController {
                 }
             });
             genTable.setChildList(childTables);
-        }
+        }*/
 
         // 生成主表模板代码
         genScheme.setGenTable(genTable);

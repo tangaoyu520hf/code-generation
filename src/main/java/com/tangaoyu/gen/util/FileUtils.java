@@ -407,7 +407,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 */
 	public static String getProjectPath(){
 		// 如果配置了工程路径，则直接返回，否则自动获取。
-		String projectPath = "";
+		String projectPath = "D:/create";
 		if (StringUtils.isNotBlank(projectPath)){
 			return projectPath;
 		}
