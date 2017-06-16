@@ -2,6 +2,7 @@ package com.tangaoyu.gen.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.tangaoyu.gen.config.datasource.TargetDataSource;
 import com.tangaoyu.gen.dao.TableDao;
 import com.tangaoyu.gen.model.Table;
 import com.tangaoyu.gen.model.TableColumn;
@@ -30,6 +31,7 @@ public class TableServiceImpl extends ServiceImpl<TableDao, Table> implements Ta
     @Autowired
     private TableColumnService tableColumnService;
     @Override
+    @TargetDataSource(name="ds1")
     public List<Table> findTableListFormDb(Table table) {
         return baseMapper.findTableListFormDb(table);
     }

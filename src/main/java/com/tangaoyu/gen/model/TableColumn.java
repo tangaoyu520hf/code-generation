@@ -6,6 +6,7 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tangaoyu.gen.util.StringUtils;
 
 import java.io.Serializable;
@@ -142,6 +143,7 @@ public class TableColumn extends Model<TableColumn> {
 	private String delFlag;
 
 	@TableField(exist = false)
+	@JsonIgnore
 	private Table genTable;	// 归属表
 
 

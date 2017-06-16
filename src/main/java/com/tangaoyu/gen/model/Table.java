@@ -95,6 +95,7 @@ public class Table extends Model<Table> {
 	@TableField(exist = false)
 	private List<String> pkList; // 当前表主键列表
 
+	@JsonIgnore
 	@TableField(exist = false)
 	private Table parent;	// 父表对象
 

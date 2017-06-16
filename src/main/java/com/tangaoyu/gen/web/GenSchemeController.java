@@ -40,7 +40,7 @@ public class GenSchemeController {
     private TableColumnService tableColumnService;
 
     @GetMapping("page")
-    public ResponseEntity page(@NotNull Integer age, @Validated GenScheme genScheme, Page page) {
+    public ResponseEntity page(GenScheme genScheme, Page page) {
         page = genSchemeService.selectPage(page,new EntityWrapper<>(genScheme));
         return ResponseEntity.ok().body(page);
     }

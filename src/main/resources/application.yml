@@ -10,6 +10,16 @@ spring:
       prepStmtCacheSize: 250
       prepStmtCacheSqlLimit: 2048
 
+# 更多数据源
+custom:
+  datasource:
+    names: ds1
+    ds1:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/jhipster?useUnicode=true&characterEncoding=utf-8
+      username: root
+      password: root
+
 server:
     port: 8080
 
