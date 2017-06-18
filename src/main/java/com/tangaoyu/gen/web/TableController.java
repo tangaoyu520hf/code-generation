@@ -7,6 +7,7 @@ import com.tangaoyu.gen.service.TableColumnService;
 import com.tangaoyu.gen.service.TableService;
 import com.tangaoyu.gen.util.HeaderUtil;
 import com.tangaoyu.gen.util.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +64,20 @@ public class TableController {
 		//如果tableid为新增 则需要检测表是否已经存在
 		if (StringUtils.isBlank(genTable.getId())&&checkTableExist(genTable)){
 			return ResponseEntity.ok().headers(HeaderUtil.createFailureAlert("下一步失败！" + genTable.getName() + " 表已经添加！")).body(null);
+		}
+		//新增
+		if(StringUtils.isBlank(genTable.getId())) {
+			List<Table> tableListFormDb = tableService.findTableListFormDb(genTable);
+			if (CollectionUtils.isNotEmpty(tableListFormDb)) {
+				genTable = tableListFormDb.get(0);
+			}
+			// 设置字段说明
+			if (StringUtils.isBlank(genTable.getComments())){
+				genTable.setComments(genTable.getName());
+			}
+			genTable.setClassName(StringUtils.toCapitalizeCamelCase(genTable.getName()));
+		}else{
+			genTable = tableService.getTableAndColumnsById(genTable.getId());
 		}
 		genTable = tableService.getTableAndColumnFormDb(genTable);
 		return ResponseEntity.ok().body(genTable);

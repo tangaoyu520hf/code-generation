@@ -11,10 +11,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * 切换数据源Advice
- *
- * @author 单红宇(365384722)
- * @myblog http://blog.csdn.net/catoop/
- * @create 2016年1月23日
  */
 @Aspect
 @Order(-1)// 保证该AOP在@Transactional之前执行

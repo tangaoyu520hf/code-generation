@@ -2,6 +2,7 @@ package com.tangaoyu.gen.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.tangaoyu.gen.config.Constant;
 import com.tangaoyu.gen.config.datasource.TargetDataSource;
 import com.tangaoyu.gen.dao.TableDao;
 import com.tangaoyu.gen.model.Table;
@@ -31,31 +32,18 @@ public class TableServiceImpl extends ServiceImpl<TableDao, Table> implements Ta
     @Autowired
     private TableColumnService tableColumnService;
     @Override
-    @TargetDataSource(name="ds1")
+    @TargetDataSource(name = Constant.DATASOURCE_NAME)
     public List<Table> findTableListFormDb(Table table) {
         return baseMapper.findTableListFormDb(table);
     }
 
     @Override
+    @TargetDataSource(name = Constant.DATASOURCE_NAME)
     public Table getTableAndColumnFormDb(Table table) {
-        //新增
-        if(StringUtils.isBlank(table.getId())) {
-            List<Table> tableListFormDb = this.findTableListFormDb(table);
-            if (CollectionUtils.isNotEmpty(tableListFormDb)) {
-                table = tableListFormDb.get(0);
-            }
-            // 设置字段说明
-            if (StringUtils.isBlank(table.getComments())){
-                table.setComments(table.getName());
-            }
-            table.setClassName(StringUtils.toCapitalizeCamelCase(table.getName()));
-        }else{
-            table = getTableAndColumnsById(table.getId());
-        }
         // 如果有表名，则获取物理表
         if (StringUtils.isNotBlank(table.getName())){
             // 添加新列
-            List<TableColumn> columnList = baseMapper.findTableColumnList(table);
+            List<TableColumn> columnList = tableColumnService.findTableColumnListFromDB(table);
             for (TableColumn column : columnList){
                 boolean b = false;
                 for (TableColumn e : table.getColumnList()){
@@ -67,7 +55,6 @@ public class TableServiceImpl extends ServiceImpl<TableDao, Table> implements Ta
                     table.getColumnList().add(column);
                 }
             }
-
             // 删除已删除的列
             for (TableColumn e : table.getColumnList()){
                 boolean b = false;

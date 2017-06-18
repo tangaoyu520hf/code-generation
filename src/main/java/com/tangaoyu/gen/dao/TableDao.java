@@ -18,7 +18,5 @@ public interface TableDao extends BaseMapper<Table> {
 
     List<Table> findTableListFormDb(Table table);
 
-    List<TableColumn> findTableColumnList(Table table);
-
     List<String> findTablePK(Table table);
 }

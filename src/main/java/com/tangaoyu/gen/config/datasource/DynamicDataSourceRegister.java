@@ -23,12 +23,8 @@ import org.springframework.core.type.AnnotationMetadata;
 
 /**
  * 动态数据源注册<br/>
- * 启动动态数据源请在启动类中（如SpringBootSampleApplication）
+ * 启动动态数据源请在启动类中（如CodeGenerationApplication）
  * 添加 @Import(DynamicDataSourceRegister.class)
- *
- * @author 单红宇(365384722)
- * @myblog http://blog.csdn.net/catoop/
- * @create 2016年1月24日
  */
 public class DynamicDataSourceRegister
         implements ImportBeanDefinitionRegistrar, EnvironmentAware {
@@ -71,17 +67,11 @@ public class DynamicDataSourceRegister
         logger.info("Dynamic DataSource Registry");
     }
 
+
     /**
-     * 创建DataSource
-     *
-     * @param type
-     * @param driverClassName
-     * @param url
-     * @param username
-     * @param password
+     * 创建数据源
+     * @param dsMap
      * @return
-     * @author SHANHY
-     * @create 2016年1月24日
      */
     @SuppressWarnings("unchecked")
     public DataSource buildDataSource(Map<String, Object> dsMap) {
@@ -102,7 +92,7 @@ public class DynamicDataSourceRegister
                     .username(username).password(password).type(dataSourceType);
             return factory.build();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(),e);
         }
         return null;
     }
@@ -119,8 +109,6 @@ public class DynamicDataSourceRegister
     /**
      * 初始化主数据源
      *
-     * @author SHANHY
-     * @create 2016年1月24日
      */
     private void initDefaultDataSource(Environment env) {
         // 读取主数据源
@@ -142,8 +130,6 @@ public class DynamicDataSourceRegister
      *
      * @param dataSource
      * @param env
-     * @author SHANHY
-     * @create  2016年1月25日
      */
     private void dataBinder(DataSource dataSource, Environment env){
         RelaxedDataBinder dataBinder = new RelaxedDataBinder(dataSource);
@@ -168,9 +154,6 @@ public class DynamicDataSourceRegister
 
     /**
      * 初始化更多数据源
-     *
-     * @author SHANHY
-     * @create 2016年1月24日
      */
     private void initCustomDataSources(Environment env) {
         // 读取配置文件获取更多数据源，也可以通过defaultDataSource读取数据库获取更多数据源

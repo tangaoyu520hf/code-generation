@@ -3,6 +3,9 @@ package com.tangaoyu.gen.config.datasource;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 动态数据源上下文
+ */
 public class DynamicDataSourceContextHolder {
 
     private static final ThreadLocal<String> contextHolder = new ThreadLocal<String>();
@@ -25,8 +28,6 @@ public class DynamicDataSourceContextHolder {
      *
      * @param dataSourceId
      * @return
-     * @author SHANHY
-     * @create  2016年1月24日
      */
     public static boolean containsDataSource(String dataSourceId){
         return dataSourceIds.contains(dataSourceId);
