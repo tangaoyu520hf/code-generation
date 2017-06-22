@@ -35,5 +35,7 @@ public interface TableService extends IService<Table> {
      * @param id
      * @return
      */
-    public Table getTableAndColumnsById(String id);
+    Table getTableAndColumnsById(String id);
+
+
 }

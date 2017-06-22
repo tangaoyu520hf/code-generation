@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tangaoyu.gen.util.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
@@ -281,6 +282,39 @@ public class Table extends Model<Table> {
 			}
 		}
 		return new ArrayList(importList);
+	}
+
+	/**
+	 * 转换filed实体为xmlmapper中的basecolumn字符串信息
+	 *
+	 * @return
+	 */
+	public String getFieldNames() {
+		StringBuilder names = new StringBuilder();
+		if (CollectionUtils.isNotEmpty(this.columnList)) {
+			for (int i = 0; i < columnList.size(); i++) {
+				TableColumn tableColumn = columnList.get(i);
+				if (i == columnList.size() - 1) {
+					names.append(cov2col(tableColumn));
+				} else {
+					names.append(cov2col(tableColumn)).append(", ");
+				}
+			}
+		}
+		return names.toString();
+	}
+
+	/**
+	 * mapper xml中的字字段添加as
+	 *
+	 * @param field 字段实体
+	 * @return 转换后的信息
+	 */
+	private String cov2col(TableColumn field) {
+		if (null != field) {
+			return field.getName() + " AS " + field.getSimpleJavaField();
+		}
+		return "";
 	}
 
 
