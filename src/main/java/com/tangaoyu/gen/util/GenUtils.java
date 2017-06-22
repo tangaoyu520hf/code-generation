@@ -28,6 +28,11 @@ public class GenUtils {
 	public static final String SUPERD_SERVICE_CLASS = "com.baomidou.mybatisplus.service.IService";
 	public static final String SUPERD_SERVICEIMPL_CLASS = "com.baomidou.mybatisplus.service.impl.ServiceImpl";
 
+	private static GenConfig genConfig;
+
+	static {
+		genConfig = fileToObject("config.xml", GenConfig.class);
+	}
 
 	/**
 	 * 初始化列属性字段
@@ -192,7 +197,31 @@ public class GenUtils {
 	 * @return
 	 */
 	public static GenConfig getConfig(){
-		return fileToObject("config.xml", GenConfig.class);
+		return genConfig;
+	}
+
+	/**
+	 * 获取java类型
+	 * @return
+	 */
+	public static List<Dict> getJavaTypeList(){
+		return genConfig.getJavaTypeList();
+	}
+
+	/**
+	 * 获取查询类型
+	 * @return
+	 */
+	public static List<Dict> getQueryTypeList(){
+		return genConfig.getQueryTypeList();
+	}
+
+	/**
+	 * 获取查询类型
+	 * @return
+	 */
+	public static List<Dict> getShowTypeList(){
+		return genConfig.getShowTypeList();
 	}
 
 	/**

@@ -2,19 +2,19 @@ package com.tangaoyu.gen.web;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.tangaoyu.gen.model.*;
+import com.tangaoyu.gen.model.GenScheme;
+import com.tangaoyu.gen.model.GenTemplate;
+import com.tangaoyu.gen.model.Table;
 import com.tangaoyu.gen.service.GenSchemeService;
 import com.tangaoyu.gen.service.TableColumnService;
 import com.tangaoyu.gen.service.TableService;
 import com.tangaoyu.gen.util.GenUtils;
 import com.tangaoyu.gen.util.StringUtils;
-import javafx.scene.control.Tab;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

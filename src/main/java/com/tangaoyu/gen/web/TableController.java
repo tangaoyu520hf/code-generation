@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.tangaoyu.gen.model.Table;
 import com.tangaoyu.gen.service.TableColumnService;
 import com.tangaoyu.gen.service.TableService;
+import com.tangaoyu.gen.util.GenUtils;
 import com.tangaoyu.gen.util.HeaderUtil;
 import com.tangaoyu.gen.util.StringUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -15,7 +16,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 业务表Controller
@@ -106,6 +109,47 @@ public class TableController {
 		}
 		tableService.insertAndSaveClounm(genTable);
 		return ResponseEntity.ok().body(null);
+	}
+
+
+	/**
+	 * 获取所有类型
+	 * @return
+	 */
+	@GetMapping("/getTypes")
+	public ResponseEntity getTypes() {
+		Map map = new HashMap();
+		map.put("javaTypes",GenUtils.getJavaTypeList());
+		map.put("showTypes",GenUtils.getShowTypeList());
+		map.put("queryTypes",GenUtils.getQueryTypeList());
+		return ResponseEntity.ok().body(map);
+	}
+
+	/**
+	 * 获取基本类型
+	 * @return
+	 */
+	@GetMapping("/getJavaTypes")
+	public ResponseEntity getJavaTypes() {
+		return ResponseEntity.ok().body(GenUtils.getJavaTypeList());
+	}
+
+	/**
+	 * 获取查询类型
+	 * @return
+	 */
+	@GetMapping("/getQueryTypes")
+	public ResponseEntity getQueryTypes() {
+		return ResponseEntity.ok().body(GenUtils.getQueryTypeList());
+	}
+
+	/**
+	 * 获取显示类型
+	 * @return
+	 */
+	@GetMapping("/getShowTypes")
+	public ResponseEntity getShowTypes() {
+		return ResponseEntity.ok().body(GenUtils.getShowTypeList());
 	}
 	/*
 	@RequestMapping(value = "delete")
