@@ -24,9 +24,9 @@ public class GenUtils {
 
 	private static Logger logger = LoggerFactory.getLogger(GenUtils.class);
 
-	public static final String SUPERD_MAPPER_CLASS = "com.baomidou.mybatisplus.mapper.BaseMapper";
-	public static final String SUPERD_SERVICE_CLASS = "com.baomidou.mybatisplus.service.IService";
-	public static final String SUPERD_SERVICEIMPL_CLASS = "com.baomidou.mybatisplus.service.impl.ServiceImpl";
+	public static final String SUPERD_MAPPER_CLASS = "com.icss.cloud.common.mapper.IBaseMapperMapper";
+	public static final String SUPERD_SERVICE_CLASS = "com.icss.cloud.common.service.BaseService";
+	public static final String SUPERD_SERVICEIMPL_CLASS = "com.icss.cloud.common.service.impl.BaseServiceImpl";
 
 	private static GenConfig genConfig;
 

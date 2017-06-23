@@ -108,7 +108,7 @@ public class GenSchemeController {
 
         // 获取模板列表
         List<GenTemplate> templateList = GenUtils.getTemplateList(genScheme.getCategory(), false);
-/*        List<GenTemplate> childTableTemplateList = GenUtils.getTemplateList(genScheme.getCategory(), true);
+        List<GenTemplate> childTableTemplateList = GenUtils.getTemplateList(genScheme.getCategory(), true);
 
         // 如果有子表模板，则需要获取子表列表
         if (childTableTemplateList.size() > 0){
@@ -127,7 +127,7 @@ public class GenSchemeController {
                 }
             });
             genTable.setChildList(childTables);
-        }*/
+        }
 
         // 生成主表模板代码
         genScheme.setGenTable(genTable);

@@ -3,6 +3,7 @@
  */
 package com.tangaoyu.gen.model;
 
+import com.tangaoyu.gen.util.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ public class Dict {
 	private String value;	// 数据值
 	private String label;	// 标签名
 	private String type;	// 类型
+	private String process; // 处理方式
 	private String description;// 描述
 	private Integer sort;	// 排序
 	private String parentId;//父Id
@@ -92,5 +94,18 @@ public class Dict {
 	@Override
 	public String toString() {
 		return label;
+	}
+
+	@XmlAttribute
+	public String getProcess() {
+		if(StringUtils.isNotBlank(process)) {
+			process.replace(">", "&gt;");
+			process.replace("<", "&lt;");
+		}
+		return process;
+	}
+
+	public void setProcess(String process) {
+		this.process = process;
 	}
 }

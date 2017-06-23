@@ -4,9 +4,7 @@
 	<category>
 		<category value="curd" label="增删改查（单表）">
 			<template>curd/controller.xml</template>
-			<template>curd/service.xml</template>
-			<template>curd/serviceImpl.xml</template>
-			<template>category-ref:dao</template>
+			<template>category-ref:service</template>
 <!--			<template>curd/viewForm.xml</template>
 			<template>curd/viewList.xml</template>-->
 		</category>
@@ -17,7 +15,7 @@
 			<template>curd/viewFormMany.xml</template>
 			<template>curd/viewList.xml</template>
 			<childTable>
-				<template>category-ref:dao</template>
+				<template>category-ref:service</template>
 			</childTable>
 		</category>
 		<category value="dao" label="仅持久层（dao/entity/mapper）">
@@ -25,7 +23,12 @@
 			<template>dao/model.xml</template>
 			<template>dao/mapper.xml</template>
 		</category>
-		<category value="treeTable" label="树结构表（一体）">
+		<category value="service" label="服务层+持久层（service/dao/entity/mapper）">
+			<template>curd/service.xml</template>
+			<template>curd/serviceImpl.xml</template>
+			<template>category-ref:dao</template>
+		</category>
+<!--		<category value="treeTable" label="树结构表（一体）">
 			<template>treetable/controller.xml</template>
 			<template>treetable/service.xml</template>
 			<template>treetable/dao.xml</template>
@@ -36,7 +39,7 @@
 		</category>
 		<category value="treeTableAndList" label="树结构表（左树右表）">
 			<template>category-ref:dao</template>
-		</category>
+		</category>-->
 	</category>
 	<!-- java类型 -->
 	<javaType>
@@ -51,16 +54,16 @@
 	</javaType>
 	<!-- 查询类型 -->
 	<queryType>
-		<dict value="=" label="=" />
-		<dict value="!=" label="!=" />
-		<dict value="&gt;" label="&gt;" />
-		<dict value="&gt;=" label="&gt;=" />
-		<dict value="&lt;" label="&lt;" />
-		<dict value="&lt;=" label="&lt;=" />
-		<dict value="between" label="Between" />
-		<dict value="like" label="Like" />
-		<dict value="left_like" label="Left Like" />
-		<dict value="right_like" label="Right Like" />
+		<dict value="=" label="=" process="= #'{'{0}'}'" />
+		<dict value="!=" label="!=" process="= #'{'{0}'}'" />
+		<dict value="&gt;" label="&gt;" process="&gt; #'{'{0}'}'"/>
+		<dict value="&gt;=" label="&gt;=" process="&gt;= #'{'{0}'}'" />
+		<dict value="&lt;" label="&lt;" process="&lt; #'{'{0}'}'" />
+		<dict value="&lt;=" label="&lt;=" process="&lt;= #'{'{0}'}'" />
+		<dict value="between" label="Between" process="= #'{'{0}'}'" />
+		<dict value="like" label="Like" process=" LIKE CONCAT('%',#'{'{0}'}','%' ) " />
+		<dict value="left_like" label="Left Like" process=" LIKE CONCAT('%',#'{'{0}'}' ) " />
+		<dict value="right_like" label="Right Like" process=" LIKE CONCAT(#'{'{0}'}','%' ) " />
 	</queryType>
 	<!-- 字段显示类型 -->
 	<showType>

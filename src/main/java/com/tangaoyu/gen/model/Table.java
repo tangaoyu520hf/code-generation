@@ -258,7 +258,6 @@ public class Table extends Model<Table> {
 
 		importList.add("com.baomidou.mybatisplus.annotations.TableId");
 		importList.add("com.baomidou.mybatisplus.annotations.TableField");
-		importList.add("import java.io.Serializable;");
 
 		for (TableColumn column : getColumnList()){
 			if (("1".equals(column.getIsQuery()) && "between".equals(column.getQueryType())

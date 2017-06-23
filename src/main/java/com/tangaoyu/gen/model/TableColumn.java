@@ -1,16 +1,19 @@
 package com.tangaoyu.gen.model;
 
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tangaoyu.gen.util.GenUtils;
 import com.tangaoyu.gen.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * <p>
@@ -464,6 +467,22 @@ public class TableColumn extends Model<TableColumn> {
 				&& !StringUtils.equals(getSimpleJavaField(), "createTime")
 				&& !StringUtils.equals(getSimpleJavaField(), "createId")
 				&& !StringUtils.equals(getSimpleJavaField(), "deleteFlag");
+	}
+
+	/**
+	 * 根据查询类型 生成查询条件
+	 * @return
+	 */
+	public String getQueryConditionByType(){
+		List<Dict> queryTypeList = GenUtils.getConfig().getQueryTypeList();
+		Optional<String> first = queryTypeList.stream().filter(dict -> dict.getValue().equals(this.getQueryType())).map(dict -> {
+			String process = dict.getProcess();
+			if(StringUtils.isNotBlank(process)){
+				return MessageFormat.format(process, "ew.entity."+this.getSimpleJavaField());
+			}
+			return null;
+		}).findFirst();
+		return first.orElseGet(() -> " = #{ew.entity."+this.getSimpleJavaField()+"}");
 	}
 
 
