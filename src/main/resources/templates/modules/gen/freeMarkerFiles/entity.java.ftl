@@ -55,7 +55,17 @@ public class ${ClassName} extends Model<${ClassName}> {
     </#if>
     private ${c.simpleJavaType} ${c.simpleJavaField};
 </#list>
-
+<#-- 范围条件字段 -->
+<#list table.columnList as c>
+    <#if c.isQuery?? && c.isQuery == "1" && c.queryType == "between">
+    private ${c.simpleJavaType} begin${c.simpleJavaField?cap_first};		<#if c.comments??>// 开始 ${c.comments}</#if>
+    private ${c.simpleJavaType} end${c.simpleJavaField?cap_first};		<#if c.comments??>// 结束 ${c.comments}</#if>
+    </#if>
+</#list>
+<#-- 子表列表字段 -->
+<#list table.childList as c>
+private List<${c.className?cap_first}> ${c.className?uncap_first}List = null;		// 子表列表
+</#list>
 <#-- 生成get和set方法 -->
 <#list table.columnList as c>
 
@@ -68,6 +78,37 @@ public class ${ClassName} extends Model<${ClassName}> {
         this.${c.simpleJavaField} = ${c.simpleJavaField};
     }
 </#list>
+<#-- 范围条件字段get和set方法 -->
+<#list table.columnList as c>
+    <#if c.isQuery?? && c.isQuery == "1" && c.queryType == "between">
+    public ${c.simpleJavaType} getBegin${c.simpleJavaField?cap_first}() {
+        return begin${c.simpleJavaField?cap_first};
+    }
+
+    public void setBegin${c.simpleJavaField?cap_first}(${c.simpleJavaType} begin${c.simpleJavaField?cap_first}) {
+        this.begin${c.simpleJavaField?cap_first} = begin${c.simpleJavaField?cap_first};
+    }
+
+    public ${c.simpleJavaType} getEnd${c.simpleJavaField?cap_first}() {
+        return end${c.simpleJavaField?cap_first};
+    }
+
+    public void setEnd${c.simpleJavaField?cap_first}(${c.simpleJavaType} end${c.simpleJavaField?cap_first}) {
+        this.end${c.simpleJavaField?cap_first} = end${c.simpleJavaField?cap_first};
+    }
+    </#if>
+</#list>
+<#-- 子表列表get和set方法 -->
+<#list table.childList as c>
+    public List<${c.className?cap_first}> get${c.className?cap_first}List() {
+        return ${c.className?uncap_first}List;
+    }
+
+    public void set${c.className?cap_first}List(List<${c.className?cap_first}> ${c.className?uncap_first}List) {
+        this.${c.className?uncap_first}List = ${c.className?uncap_first}List;
+    }
+</#list>
+
 
 <#if table.tableColumnPk??>
     @Override

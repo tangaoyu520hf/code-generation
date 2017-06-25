@@ -43,6 +43,13 @@ public class ${ClassName}Controller{
    @Autowired
    private ${ClassName}Service baseService;
 
+    <#if category ?? && category=='curd_many' && (table.childList?size>0)>
+    <#list table.childList as c>
+    @Autowired
+    private ${c.className?cap_first}Service ${c.className?uncap_first}Service;
+
+    </#list>
+    </#if>
     /**
      * 分页查询
      * @param model 分页对象
@@ -64,6 +71,13 @@ public class ${ClassName}Controller{
     @GetMapping("/{key}")
     public ResponseBean getModel(@PathVariable String key) {
         ${ClassName} model = this.baseService.selectById(key);
+        <#if category ?? && category=='curd_many' && (table.childList?size>0)>
+        <#list table.childList as c>
+        ${c.className?cap_first} ${c.className?uncap_first} = new ${c.className?cap_first}();
+        ${c.className?uncap_first}.set${table.camelCaseParentTableFk}(model.get${table.tableColumnPk.name?cap_first}());
+        ${className}.set${c.className?cap_first}List(${c.className?uncap_first}Service.selectComplexList(new EntityWrapper()(${c.className?uncap_first})));
+        </#list>
+        </#if>
         if(null==model){
             return new ResponseBean("IsNotExist","该数据不存在");
         }
@@ -85,7 +99,7 @@ public class ${ClassName}Controller{
      * @return
      */
     @PostMapping("/add")
-    public ResponseBean addProduct(@Validated @RequestBody ${ClassName} model) {
+    public ResponseBean add(@Validated @RequestBody ${ClassName} model) {
         return saveOrUpdate(model);
     }
 
@@ -95,7 +109,7 @@ public class ${ClassName}Controller{
      * @return
      */
     @PostMapping("/update")
-    public ResponseBean updateProduct(@Validated @RequestBody ${ClassName} model) {
+    public ResponseBean update(@Validated @RequestBody ${ClassName} model) {
         return saveOrUpdate(model);
     }
 
@@ -105,7 +119,7 @@ public class ${ClassName}Controller{
      * @return
      */
     @PostMapping("/deletes")
-    public ResponseBean deleteProducts(@RequestBody List<String> list) {
+    public ResponseBean deletes(@RequestBody List<String> list) {
         boolean batchIds = this.baseService.deleteBatchIds(list);
         return new ResponseBean();
     }
@@ -116,7 +130,13 @@ public class ${ClassName}Controller{
      * @return
      */
     private ResponseBean saveOrUpdate(${ClassName} model) {
+    <#if category?? && category=='curd_many'&& (table.childList?size>0)>
+        boolean success = this.baseService.saveOrUpdateAndChild(model);
+    <#else >
         boolean success = this.baseService.insertOrUpdate(model);
+    </#if >
         return new ResponseBean();
     }
+
+
 }

@@ -310,6 +310,7 @@ public class GenUtils {
 		model.put("functionName", genScheme.getFunctionName());
 		model.put("functionNameSimple", genScheme.getFunctionNameSimple());
 		model.put("functionAuthor", genScheme.getFunctionAuthor());
+		model.put("category",genScheme.getCategory());
 		model.put("functionVersion", DateUtils.getDate());
 
 		model.put("urlPrefix", model.get("moduleName")+(StringUtils.isNotBlank(genScheme.getSubModuleName())
@@ -337,6 +338,8 @@ public class GenUtils {
 
 
 		model.put("baseResultMap",true);
+
+
 
 		return model;
 	}

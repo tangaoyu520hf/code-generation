@@ -56,7 +56,6 @@ public class ValidatorAspect {
             Method method = ((MethodSignature)joinPoint.getSignature()).getMethod();
             ExecutableValidator executableValidator = (ExecutableValidator) this.validator;
             Set<ConstraintViolation<Object>> constraintViolations = executableValidator.validateParameters(target, method, args);
-            System.out.println(constraintViolations);
         }
         Object result = joinPoint.proceed();
         return result;

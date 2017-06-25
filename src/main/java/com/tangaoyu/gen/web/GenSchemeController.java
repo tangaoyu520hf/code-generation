@@ -116,6 +116,7 @@ public class GenSchemeController {
             parentTable.setParentTable(genTable.getName());
             
             List<Table> childTables = tableService.selectList(new EntityWrapper<>(parentTable));
+            genTable.setChildList(childTables);
             childTables.forEach(childTable -> {
                 // 生成子表模板代码
                 childTable = tableService.getTableAndColumnsById(childTable.getId());
@@ -126,7 +127,6 @@ public class GenSchemeController {
                     result.append(GenUtils.generateToFile(tpl, childTableModel, genScheme.getReplaceFile()));
                 }
             });
-            genTable.setChildList(childTables);
         }
 
         // 生成主表模板代码

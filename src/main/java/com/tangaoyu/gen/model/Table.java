@@ -304,6 +304,17 @@ public class Table extends Model<Table> {
 	}
 
 	/**
+	 * 获取驼峰外键
+	 * @return
+	 */
+	public String getCamelCaseParentTableFk(){
+		if(StringUtils.isNotBlank(this.parentTableFk)){
+			return StringUtils.toCapitalizeCamelCase(this.parentTableFk);
+		}
+		return "";
+	}
+
+	/**
 	 * mapper xml中的字字段添加as
 	 *
 	 * @param field 字段实体
