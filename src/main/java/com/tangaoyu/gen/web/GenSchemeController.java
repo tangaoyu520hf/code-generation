@@ -56,7 +56,7 @@ public class GenSchemeController {
             genScheme = genSchemeService.selectById(genScheme.getId());
         }
         if (StringUtils.isBlank(genScheme.getPackageName())){
-            genScheme.setPackageName("com.thinkgem.jeesite.modules");
+            genScheme.setPackageName("com.icss.cloud");
         }
         model.put("genScheme", genScheme);
         model.put("config", GenUtils.getConfig());
@@ -73,7 +73,7 @@ public class GenSchemeController {
     public ResponseEntity save(@Validated @RequestBody GenScheme genScheme){
         this.genSchemeService.insertOrUpdate(genScheme);
         //生成代码
-        if(genScheme.getGen()){
+        if(null!=genScheme.getGenIs()&&genScheme.getGenIs()){
             generateCode(genScheme);
         }
         return ResponseEntity.ok().body(null);
@@ -87,7 +87,7 @@ public class GenSchemeController {
     @GetMapping("generateCode")
     public ResponseEntity generateTheCode(GenScheme genScheme){
         GenScheme queryGenScheme = genSchemeService.selectById(genScheme.getId());
-        queryGenScheme.setGen(genScheme.getGen());
+        queryGenScheme.setGenIs(genScheme.getGenIs());
         //生成代码
         generateCode(queryGenScheme);
         return ResponseEntity.ok().body(null);

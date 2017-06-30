@@ -5,13 +5,12 @@
 * Date:     ${functionVersion}
 */
 package ${packageName}.${moduleName}.web;
-
+import com.icss.cloud.common.model.ResponseBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.icss.cloud.product.common.model.ResponseBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import ${packageName}.${moduleName}.model.${ClassName};
 import ${packageName}.${moduleName}.service.${ClassName}Service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
@@ -66,7 +63,7 @@ public class ${ClassName}Controller{
 
     /**
      * 获取详情 （修改时查询用）
-     * @param id
+     * @param key
      */
     @GetMapping("/{key}")
     public ResponseBean getModel(@PathVariable String key) {
@@ -86,7 +83,7 @@ public class ${ClassName}Controller{
 
     /**
      * 获取详情
-     * @param id
+     * @param key
      */
     @GetMapping("/view")
     public ResponseBean get(@RequestParam String key) {

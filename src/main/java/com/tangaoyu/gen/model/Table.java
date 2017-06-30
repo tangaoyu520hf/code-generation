@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tangaoyu.gen.util.GenUtils;
 import com.tangaoyu.gen.util.StringUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.*;
 
@@ -253,20 +255,31 @@ public class Table extends Model<Table> {
 	public List<String> getImportList(){
 		Set<String> importList = new HashSet<>(); // 引用列表
 
-		importList.add("com.baomidou.mybatisplus.activerecord.Model");
+		/*importList.add("com.baomidou.mybatisplus.activerecord.Model");*/
 		importList.add("com.baomidou.mybatisplus.annotations.TableName");
 
 		importList.add("com.baomidou.mybatisplus.annotations.TableId");
 		importList.add("com.baomidou.mybatisplus.annotations.TableField");
 
 		for (TableColumn column : getColumnList()){
-			if (("1".equals(column.getIsQuery()) && "between".equals(column.getQueryType())
-					||!column.getIsNotBaseField())){
-				// 导入类型依赖包， 如果类型中包含“.”，则需要导入引用。
-				if (StringUtils.indexOf(column.getJavaType(), ".") != -1 && !importList.contains(column.getJavaType())){
-					importList.add(column.getJavaType());
+/*			if (("1".equals(column.getIsQuery()) && "between".equals(column.getQueryType())
+					)){*/
+			// 导入类型依赖包， 如果类型中包含“.”，则需要导入引用。
+			if (StringUtils.indexOf(column.getJavaType(), ".") != -1 && !importList.contains(column.getJavaType())){
+				importList.add(column.getJavaType());
+			}
+			if ("java.util.Date".equals(column.getJavaType())){
+				importList.add("com.fasterxml.jackson.annotation.JsonFormat");
+			}
+			//如果包含基础类型字段 则导入忽略
+			if (GenUtils.isBaseColumn(column.getSimpleJavaField())){
+				if(column.getSimpleJavaField().equalsIgnoreCase("isDelete")){
+					importList.add("com.baomidou.mybatisplus.annotations.TableLogic;");
+				}else{
+					importList.add("com.baomidou.mybatisplus.enums.FieldFill;");
 				}
 			}
+			/*}*/
 			// 导入JSR303、Json等依赖包
 			for (String ann : column.getAnnotationList()){
 				if (!importList.contains(StringUtils.substringBeforeLast(ann, "("))){

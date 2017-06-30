@@ -22,6 +22,7 @@ public class GenConfig implements Serializable {
 	private List<Dict> javaTypeList;		// Java类型
 	private List<Dict> queryTypeList;		// 查询类型
 	private List<Dict> showTypeList;		// 显示类型
+	private List<Dict> baseColumnList;		//基本字段
 
 	public GenConfig() {
 		super();
@@ -66,5 +67,14 @@ public class GenConfig implements Serializable {
 	public void setShowTypeList(List<Dict> showTypeList) {
 		this.showTypeList = showTypeList;
 	}
-	
+
+	@XmlElementWrapper(name = "baseColumn")
+	@XmlElement(name = "dict")
+	public List<Dict> getBaseColumnList() {
+		return baseColumnList;
+	}
+
+	public void setBaseColumnList(List<Dict> baseColumnList) {
+		this.baseColumnList = baseColumnList;
+	}
 }

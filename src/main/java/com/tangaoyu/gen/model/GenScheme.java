@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.groups.ConvertGroup;
 import java.io.Serializable;
 
 /**
@@ -100,7 +102,7 @@ public class GenScheme extends Model<GenScheme> {
 	private String delFlag;
 
 	@TableField(exist = false)
-	private Boolean isGen;
+	private Boolean genIs;
 
 	@TableField(exist = false)
 	private Table genTable;		// 业务表名
@@ -237,12 +239,12 @@ public class GenScheme extends Model<GenScheme> {
 		this.delFlag = delFlag;
 	}
 
-	public Boolean getGen() {
-		return isGen;
+	public Boolean getGenIs() {
+		return genIs;
 	}
 
-	public void setGen(Boolean gen) {
-		isGen = gen;
+	public void setGenIs(Boolean genIs) {
+		this.genIs = genIs;
 	}
 
 	public Table getGenTable() {

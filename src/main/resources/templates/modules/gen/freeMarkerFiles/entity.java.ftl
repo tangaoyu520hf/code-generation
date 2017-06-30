@@ -10,12 +10,6 @@ package ${packageName}.${moduleName}.model;
 <#list table.importList as i>
 import ${i};
 </#list>
-<#-- 如果有逻辑删除 则使用mytatisPlus逻辑删除 -->
-<#list table.columnList as c>
-<#if "delete_flag" == c.name>
-import com.baomidou.mybatisplus.annotations.TableLogic;
-</#if>
-</#list>
 /**
 * <p>
 * ${functionName}
@@ -24,7 +18,7 @@ import com.baomidou.mybatisplus.annotations.TableLogic;
 * @since ${functionVersion}
 */
 @TableName("${table.name}")
-public class ${ClassName} extends Model<${ClassName}> {
+public class ${ClassName} <#--extends Model<${ClassName}>--> {
 
     private static final long serialVersionUID = 1L;
 <#-- 生成字段属性 -->
@@ -39,8 +33,10 @@ public class ${ClassName} extends Model<${ClassName}> {
     <#if table.tableColumnPk?? && table.tableColumnPk.name == c.name>
     @TableId("${c.name}")
     <#-- 其它字段 -->
-    <#elseif !c.isNotBaseField>
-    @TableField(value = "${c.name}", validate = FieldStrategy.IGNORED)
+    <#elseif "createTime" == c.simpleJavaField || "createId" == c.simpleJavaField>
+    @TableField(value = "${c.name}", fill = FieldFill.INSERT)
+    <#elseif "updateTime" == c.simpleJavaField || "updateId" == c.simpleJavaField>
+    @TableField(value = "${c.name}", fill = FieldFill.UPDATE)
     <#else>
     @TableField("${c.name}")
     </#if>
@@ -50,7 +46,7 @@ public class ${ClassName} extends Model<${ClassName}> {
     @${a}
     </#list>
     </#if>
-    <#if "delete_flag" == c.name>
+    <#if "is_delete" == c.name>
     @TableLogic
     </#if>
     private ${c.simpleJavaType} ${c.simpleJavaField};
@@ -69,11 +65,24 @@ private List<${c.className?cap_first}> ${c.className?uncap_first}List = null;		/
 <#-- 生成get和set方法 -->
 <#list table.columnList as c>
 
+    <#if c.comments??>
+    /**
+    * 获取${c.comments}
+    */
+    </#if>
     <#-- 其它字段 -->
+    <#if "Date" == c.simpleJavaType>
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    </#if>
     public ${c.simpleJavaType} get${c.simpleJavaField?cap_first}() {
         return ${c.simpleJavaField};
     }
 
+    <#if c.comments??>
+    /**
+    * 设置${c.comments}
+    */
+    </#if>
     public void set${c.simpleJavaField?cap_first}(${c.simpleJavaType} ${c.simpleJavaField}) {
         this.${c.simpleJavaField} = ${c.simpleJavaField};
     }
@@ -110,10 +119,10 @@ private List<${c.className?cap_first}> ${c.className?uncap_first}List = null;		/
 </#list>
 
 
-<#if table.tableColumnPk??>
+<#--<#if table.tableColumnPk??>
     @Override
     protected Serializable pkVal() {
         return this.${table.tableColumnPk.simpleJavaField};
     }
-</#if>
+</#if>-->
 }

@@ -3,6 +3,8 @@
  */
 package com.tangaoyu.gen.util;
 
+import com.tangaoyu.gen.common.generator.ITypeConvert;
+import com.tangaoyu.gen.common.generator.MySqlTypeConvert;
 import com.tangaoyu.gen.model.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -29,9 +31,11 @@ public class GenUtils {
 	public static final String SUPERD_SERVICEIMPL_CLASS = "com.icss.cloud.common.service.impl.BaseServiceImpl";
 
 	private static GenConfig genConfig;
+	private static ITypeConvert iTypeConvert;
 
 	static {
 		genConfig = fileToObject("config.xml", GenConfig.class);
+		iTypeConvert = new MySqlTypeConvert();
 	}
 
 	/**
@@ -50,33 +54,41 @@ public class GenUtils {
 			if (StringUtils.isBlank(column.getComments())){
 				column.setComments(column.getName());
 			}
-			
+			column.setJavaType(iTypeConvert.processTypeConvert(column.getJdbcType()).getPkg());
+
+/*
+
 			// 设置java类型
 			if (StringUtils.startsWithIgnoreCase(column.getJdbcType(), "CHAR")
 					|| StringUtils.startsWithIgnoreCase(column.getJdbcType(), "VARCHAR")
-					|| StringUtils.startsWithIgnoreCase(column.getJdbcType(), "NARCHAR")){
+					|| StringUtils.startsWithIgnoreCase(column.getJdbcType(), "NARCHAR")
+					|| StringUtils.startsWithIgnoreCase(column.getJdbcType(), "text")){
 				column.setJavaType("String");
 			}else if (StringUtils.startsWithIgnoreCase(column.getJdbcType(), "DATETIME")
 					|| StringUtils.startsWithIgnoreCase(column.getJdbcType(), "DATE")
 					|| StringUtils.startsWithIgnoreCase(column.getJdbcType(), "TIMESTAMP")){
 				column.setJavaType("java.util.Date");
 				column.setShowType("dateselect");
+			}else if(StringUtils.startsWithIgnoreCase(column.getJdbcType(), "decimal")){
+				column.setJavaType("java.math.BigDecimal");
 			}else if (StringUtils.startsWithIgnoreCase(column.getJdbcType(), "BIGINT")
-					|| StringUtils.startsWithIgnoreCase(column.getJdbcType(), "NUMBER")){
+					|| StringUtils.startsWithIgnoreCase(column.getJdbcType(), "NUMBER")
+					|| StringUtils.startsWithIgnoreCase(column.getJdbcType(), "int")
+					){
 				// 如果是浮点型
 				String[] ss = StringUtils.split(StringUtils.substringBetween(column.getJdbcType(), "(", ")"), ",");
 				if (ss != null && ss.length == 2 && Integer.parseInt(ss[1])>0){
 					column.setJavaType("Double");
 				}
 				// 如果是整形
-				else if (ss != null && ss.length == 1 && Integer.parseInt(ss[0])<=10){
+				else if (ss != null && ss.length == 1 && Integer.parseInt(ss[0])<=11){  //这里为什么判断是11位，因为可能mysql把符号也算进来导致的11位
 					column.setJavaType("Integer");
 				}
 				// 长整形
 				else{
 					column.setJavaType("Long");
 				}
-			}
+			}*/
 			
 			// 设置java字段名
 			column.setJavaField(StringUtils.toCamelCase(column.getName()));
@@ -85,13 +97,18 @@ public class GenUtils {
 			column.setIsPk(genTable.getPkList().contains(column.getName())?"1":"0");
 
 			// 插入字段
-			column.setIsInsert("1");
-			
-			// 编辑字段
-			if (!StringUtils.equalsIgnoreCase(column.getName(), "id")
+			if(!GenUtils.isBaseColumn(column.getSimpleJavaField())){
+				column.setIsInsert("1");
+			}
+
+			// 编辑字段 注释 预留
+/*			if (!StringUtils.equalsIgnoreCase(column.getName(), "id")
 					&& !StringUtils.equalsIgnoreCase(column.getName(), "create_by")
 					&& !StringUtils.equalsIgnoreCase(column.getName(), "create_date")
 					&& !StringUtils.equalsIgnoreCase(column.getName(), "del_flag")){
+				column.setIsEdit("1");
+			}*/
+			if(!GenUtils.isBaseColumn(column.getSimpleJavaField())){
 				column.setIsEdit("1");
 			}
 
@@ -147,30 +164,34 @@ public class GenUtils {
 				column.setJavaField(column.getJavaField() + ".id");
 			}*/
 			// 创建时间、更新时间
-			else if (StringUtils.startsWithIgnoreCase(column.getName(), "create_date")
-					|| StringUtils.startsWithIgnoreCase(column.getName(), "update_date")){
+			if (StringUtils.startsWithIgnoreCase(column.getJavaType(), "java.util.Date")){
 				column.setShowType("dateselect");
 			}
 			// 备注、内容
-			else if (StringUtils.equalsIgnoreCase(column.getName(), "remarks")
+			if (StringUtils.equalsIgnoreCase(column.getName(), "remarks")
 					|| StringUtils.equalsIgnoreCase(column.getName(), "content")){
 				column.setShowType("textarea");
 			}
 			// 父级ID
-			else if (StringUtils.equalsIgnoreCase(column.getName(), "parent_id")){
+			if (StringUtils.equalsIgnoreCase(column.getName(), "parent_id")){
 				column.setJavaType("This");
 				column.setJavaField("parent.id|name");
 				column.setShowType("treeselect");
 			}
 			// 所有父级ID
-			else if (StringUtils.equalsIgnoreCase(column.getName(), "parent_ids")){
+			if (StringUtils.equalsIgnoreCase(column.getName(), "parent_ids")){
 				column.setQueryType("like");
 			}
 			// 删除标记
-			else if (StringUtils.equalsIgnoreCase(column.getName(), "del_flag")){
+			if (StringUtils.equalsIgnoreCase(column.getName(), "is_delete")){
 				column.setShowType("radiobox");
-				column.setDictType("del_flag");
+				column.setDictType("is_delete");
 			}
+
+			if(StringUtils.isBlank(column.getShowType())){
+				column.setShowType("input");
+			}
+
 		}
 	}
 	
@@ -222,6 +243,14 @@ public class GenUtils {
 	 */
 	public static List<Dict> getShowTypeList(){
 		return genConfig.getShowTypeList();
+	}
+
+
+	public static boolean isBaseColumn(String columnName){
+		List<Dict> baseColumnList = genConfig.getBaseColumnList();
+		if(CollectionUtils.isEmpty(baseColumnList))
+			return false;
+		return baseColumnList.stream().anyMatch(dict -> dict.getValue().equalsIgnoreCase(columnName));
 	}
 
 	/**

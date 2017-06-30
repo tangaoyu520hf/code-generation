@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template>
 	<name>mapper</name>
-	<filePath>src/main/resources/${packageName}/${moduleName}/dao/${moduleName}</filePath>
+	<filePath>src/main/resources/${packageName}/${moduleName}/dao</filePath>
 	<fileName>${ClassName}Dao.xml</fileName>
 	<content></content>
 	<contentPath>templates/modules/gen/freeMarkerFiles/mapper.xml.ftl</contentPath>

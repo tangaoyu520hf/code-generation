@@ -426,11 +426,11 @@ public class TableColumn extends Model<TableColumn> {
 		if ("This".equals(getJavaType())){
 			list.add("com.fasterxml.jackson.annotation.JsonBackReference");
 		}
-		if ("java.util.Date".equals(getJavaType())){
+/*		if ("java.util.Date".equals(getJavaType())){
 			list.add("com.fasterxml.jackson.annotation.JsonFormat(pattern = \"yyyy-MM-dd HH:mm:ss\")");
-		}
+		}*/
 		// 导入JSR303验证依赖包
-		if (!"1".equals(getIsNull()) && !"String".equals(getJavaType())){
+		if ("0".equals(getIsNull())){
 			list.add("javax.validation.constraints.NotNull(message=\""+getComments()+"不能为空\")");
 		}
 		else if (!"1".equals(getIsNull()) && "String".equals(getJavaType()) && !"0".equals(getDataLength())){
@@ -438,8 +438,8 @@ public class TableColumn extends Model<TableColumn> {
 					+", message=\""+getComments()+"长度必须介于 1 和 "+getDataLength()+" 之间\")");
 		}
 		else if ("String".equals(getJavaType()) && !"0".equals(getDataLength())){
-			list.add("org.hibernate.validator.constraints.Length(min=0, max="+getDataLength()
-					+", message=\""+getComments()+"长度必须介于 0 和 "+getDataLength()+" 之间\")");
+			list.add("org.hibernate.validator.constraints.Length( max="+getDataLength()
+					+", message=\""+getComments()+"的最大长度为"+getDataLength()+"\")");
 		}
 		return list;
 	}
@@ -462,12 +462,9 @@ public class TableColumn extends Model<TableColumn> {
 	 * @return
 	 */
 	public Boolean getIsNotBaseField(){
-		return!StringUtils.equals(getSimpleJavaField(), "updateTime")
-				&& !StringUtils.equals(getSimpleJavaField(), "updateId")
-				&& !StringUtils.equals(getSimpleJavaField(), "createTime")
-				&& !StringUtils.equals(getSimpleJavaField(), "createId")
-				&& !StringUtils.equals(getSimpleJavaField(), "deleteFlag");
+		return !GenUtils.isBaseColumn(getSimpleJavaField());
 	}
+
 
 	/**
 	 * 根据查询类型 生成查询条件

@@ -40,18 +40,22 @@
 		<if test="ew!=null">
 			<if test="ew.entity!=null">
 			<#list table.columnList as c>
-				<#if "delete_flag" == c.name>
-					AND mt.${c.name}= 'N'
-				<#else >
-					<if test="ew.entity.${c.simpleJavaField} !=null and ew.entity.${c.simpleJavaField} != ''"> AND mt.${c.name} ${c.queryConditionByType}</if>
+				<#if "is_delete" != c.name>
+				<if test="ew.entity.${c.simpleJavaField} !=null and ew.entity.${c.simpleJavaField} != ''"> AND mt.${c.name} ${c.queryConditionByType}</if>
 				</#if>
 			</#list>
 			</if>
 		</if>
+	<#list table.columnList as c>
+		<#if "is_delete" == c.name>
+		AND mt.${c.name}= 'N'
+		</#if>
+	</#list>
 		<if test="ew!=null">
-			<if test="ew.sqlSegment!=null">${'$'}{ew.sqlSegment}</if>
+            <if test="ew!=null and ew.sqlSegment!=null and ew.notEmptyOfWhere">${'$'}{ew.sqlSegment}</if>
 		</if>
 	</where>
+	<if test="ew!=null and ew.sqlSegment!=null and ew.emptyOfWhere">${'$'}{ew.sqlSegment}</if>
     </sql>
 
     <select id="selectComplexPage" resultType="${packageName}.${moduleName}.model.${ClassName}">

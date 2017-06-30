@@ -43,6 +43,8 @@ public class TableServiceImpl extends ServiceImpl<TableDao, Table> implements Ta
         // 如果有表名，则获取物理表
         if (StringUtils.isNotBlank(table.getName())){
             // 添加新列
+            // 获取主键,这一句不能放在  List<TableColumn> columnList = tableColumnService.findTableColumnListFromDB(table); 后面，因为多数据源问题
+            table.setPkList(baseMapper.findTablePK(table));
             List<TableColumn> columnList = tableColumnService.findTableColumnListFromDB(table);
             for (TableColumn column : columnList){
                 boolean b = false;
@@ -67,10 +69,6 @@ public class TableServiceImpl extends ServiceImpl<TableDao, Table> implements Ta
                     e.setDelFlag(TableColumn.DEL_FLAG_DELETE);
                 }
             }
-
-            // 获取主键
-            table.setPkList(baseMapper.findTablePK(table));
-
             // 初始化列属性字段
             GenUtils.initColumnField(table);
 
