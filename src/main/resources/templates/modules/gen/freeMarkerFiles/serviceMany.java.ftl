@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 中软国际科技服务（湖南）有限公司
  * FileName: ${ClassName}Service.java
  * Author:   ${functionAuthor}
@@ -14,7 +14,7 @@ import ${superServiceClassPackage};
  * </p>
  *
  * @author ${functionAuthor}
- * @since ${functionVersion}
+ * @date ${functionVersion}
  */
 public interface ${ClassName}Service extends ${superServiceClass}<${ClassName}> {
     boolean saveOrUpdateAndChild(${ClassName} ${className})

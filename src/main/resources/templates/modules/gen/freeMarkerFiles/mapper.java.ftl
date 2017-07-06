@@ -1,4 +1,4 @@
-/**
+/*
 * Copyright (c) 中软国际科技服务（湖南）有限公司
 * FileName: ${ClassName}Dao.java
 * Author:   ${functionAuthor}
@@ -12,7 +12,7 @@ import ${superMapperClassPackage};
 * ${functionName} Mapper 接口
 * </p>
 * @author ${functionAuthor}
-* @since ${functionVersion}
+* @date ${functionVersion}
 */
 public interface ${ClassName}Dao extends ${superMapperClass}<${ClassName}> {
 

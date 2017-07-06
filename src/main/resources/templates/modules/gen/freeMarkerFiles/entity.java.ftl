@@ -1,10 +1,9 @@
-/**
+/*
 * Copyright (c) 中软国际科技服务（湖南）有限公司
 * FileName: ${ClassName}.java
 * Author:   ${functionAuthor}
 * Date:     ${functionVersion}
 */
-
 package ${packageName}.${moduleName}.model;
 
 <#list table.importList as i>
@@ -15,7 +14,7 @@ import ${i};
 * ${functionName}
 * </p>
 * @author ${functionAuthor}
-* @since ${functionVersion}
+* @date ${functionVersion}
 */
 @TableName("${table.name}")
 public class ${ClassName} <#--extends Model<${ClassName}>--> {

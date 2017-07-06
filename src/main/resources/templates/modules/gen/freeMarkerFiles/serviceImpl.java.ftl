@@ -1,4 +1,4 @@
-/**
+/*
 * Copyright (c) 中软国际科技服务（湖南）有限公司
 * FileName: ${ClassName}Service.java
 * Author:   ${functionAuthor}
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author ${functionAuthor}
- * @since ${functionVersion}
+ * @date ${functionVersion}
  */
 @Service
 public class ${ClassName}ServiceImpl extends ${superServiceImplClass}<${ClassName}Dao, ${ClassName}> implements ${ClassName}Service {
