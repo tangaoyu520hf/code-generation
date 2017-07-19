@@ -1,4 +1,4 @@
-/**
+/*
 * Copyright (c) 中软国际科技服务（湖南）有限公司
 * FileName: ${ClassName}Controller.java
 * Author:   ${functionAuthor}
@@ -27,7 +27,7 @@ import java.util.List;
  * </p>
  *
  * @author ${functionAuthor}
- * @since ${functionVersion}
+ * @date ${functionVersion}
  */
 @RestController
 @RequestMapping("/${table.className?uncap_first}")
