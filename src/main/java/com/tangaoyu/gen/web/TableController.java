@@ -45,7 +45,10 @@ public class TableController {
 
 	@GetMapping("page")
 	public ResponseEntity page(Table genTable, Page page) {
-        page = tableService.selectPage(page,new EntityWrapper<>(genTable));
+		/*page.setOrderByField("name");*/
+		EntityWrapper<Table> tableEntityWrapper = new EntityWrapper<>(genTable);
+		tableEntityWrapper.where("name={0}","123");
+		page = tableService.selectPage(page,tableEntityWrapper);
 		return ResponseEntity.ok().body(page);
 	}
 

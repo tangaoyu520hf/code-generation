@@ -1,10 +1,10 @@
 /*
 * Copyright (c) 中软国际科技服务（湖南）有限公司
-* FileName: ${ClassName}.java
+* FileName: ${ClassName}Dto.java
 * Author:   ${functionAuthor}
 * Date:     ${functionVersion}
 */
-package ${packageName}.${moduleName}.model;
+package ${packageName}.${moduleName}.model.dto;
 
 <#list table.importList as i>
 import ${i};
@@ -16,8 +16,7 @@ import ${i};
 * @author ${functionAuthor}
 * @date ${functionVersion}
 */
-@TableName("${table.name}")
-public class ${ClassName} <#--extends Model<${ClassName}>--> {
+public class ${ClassName}Dto <#--extends Model<${ClassName}>--> {
 
 <#-- 生成字段属性 -->
 <#list table.columnList as c>
@@ -27,32 +26,31 @@ public class ${ClassName} <#--extends Model<${ClassName}>--> {
     * ${c.comments}
     */
     </#if>
-	<#-- 主键 -->
-    <#if table.tableColumnPk?? && table.tableColumnPk.name == c.name>
-    @TableId("${c.name}")
-    <#-- 其它字段 -->
-    <#elseif "createTime" == c.simpleJavaField || "createId" == c.simpleJavaField>
-    @TableField(value = "${c.name}", fill = FieldFill.INSERT)
-    <#elseif "updateTime" == c.simpleJavaField || "updateId" == c.simpleJavaField>
-    @TableField(value = "${c.name}", fill = FieldFill.UPDATE)
-    <#else>
-   <#-- @TableField("${c.name}")-->
-    </#if>
-    <#-- 校验 主键及公共字段不需要加校验 -->
-    <#if table.tableColumnPk?? && table.tableColumnPk.name != c.name && c.isNotBaseField >
+    <#-- 公共字段不需要生成 -->
+    <#if c.isNotBaseField >
+    <#-- 校验 主键不需要加校验 -->
+    <#if table.tableColumnPk?? && table.tableColumnPk.name != c.name >
     <#list c.simpleAnnotationList as a>
     @${a}
     </#list>
     </#if>
-    <#if "is_delete" == c.name>
-    @TableLogic
+    <#if "Date" == c.simpleJavaType>
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     </#if>
     private ${c.simpleJavaType} ${c.simpleJavaField};
+    </#if>
 </#list>
 <#-- 范围条件字段 -->
 <#list table.columnList as c>
     <#if c.isQuery?? && c.isQuery == "1" && c.queryType == "between">
+
+    <#if "Date" == c.simpleJavaType>
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    </#if>
     private ${c.simpleJavaType} begin${c.simpleJavaField?cap_first};		<#if c.comments??>// 开始 ${c.comments}</#if>
+    <#if "Date" == c.simpleJavaType>
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    </#if>
     private ${c.simpleJavaType} end${c.simpleJavaField?cap_first};		<#if c.comments??>// 结束 ${c.comments}</#if>
     </#if>
 </#list>
@@ -63,15 +61,13 @@ private List<${c.className?cap_first}> ${c.className?uncap_first}List = null;		/
 <#-- 生成get和set方法 -->
 <#list table.columnList as c>
 
+    <#if c.isNotBaseField >
+
     <#if c.comments??>
     /**
     * 获取${c.comments}
     * @return ${c.comments}
     */
-    </#if>
-    <#-- 其它字段 -->
-    <#if "Date" == c.simpleJavaType>
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     </#if>
     public ${c.simpleJavaType} get${c.simpleJavaField?cap_first}() {
         return ${c.simpleJavaField};
@@ -86,6 +82,7 @@ private List<${c.className?cap_first}> ${c.className?uncap_first}List = null;		/
     public void set${c.simpleJavaField?cap_first}(${c.simpleJavaType} ${c.simpleJavaField}) {
         this.${c.simpleJavaField} = ${c.simpleJavaField};
     }
+    </#if>
 </#list>
 <#-- 范围条件字段get和set方法 -->
 <#list table.columnList as c>

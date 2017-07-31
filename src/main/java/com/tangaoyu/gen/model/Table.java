@@ -111,6 +111,10 @@ public class Table extends Model<Table> {
 		return id;
 	}
 
+	/**
+	 *
+	 * @param id
+	 */
 	public void setId(String id) {
 		this.id = id;
 	}

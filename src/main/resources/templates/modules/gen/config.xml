@@ -23,6 +23,8 @@
 			<template>dao/dao.xml</template>
 			<template>dao/model.xml</template>
 			<template>dao/mapper.xml</template>
+			<template>dao/modelDTO.xml</template>
+			<template>dao/modelVO.xml</template>
 		</category>
 		<category value="service" label="服务层+持久层（service/dao/entity/mapper）">
 			<template>curd/service.xml</template>
