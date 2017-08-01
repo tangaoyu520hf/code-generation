@@ -63,7 +63,8 @@ public class ${ClassName}Controller{
 
     /**
      * 获取详情 （修改时查询用）
-     * @param key
+     * @param key 查询key
+     * @return ResponseBean
      */
     @GetMapping("/{key}")
     public ResponseBean getModel(@PathVariable String key) {
@@ -83,7 +84,8 @@ public class ${ClassName}Controller{
 
     /**
      * 获取详情
-     * @param key
+     * @param key 查询key
+     * @return ResponseBean
      */
     @GetMapping("/view")
     public ResponseBean get(@RequestParam String key) {
@@ -92,8 +94,8 @@ public class ${ClassName}Controller{
 
     /**
      * 新增
-     * @param model
-     * @return
+     * @param model 实体信息
+     * @return ResponseBean
      */
     @PostMapping("/add")
     public ResponseBean add(@Validated @RequestBody ${ClassName} model) {
@@ -102,8 +104,8 @@ public class ${ClassName}Controller{
 
     /**
      * 更新
-     * @param model
-     * @return
+     * @param model 实体信息
+     * @return ResponseBean
      */
     @PostMapping("/update")
     public ResponseBean update(@Validated @RequestBody ${ClassName} model) {
@@ -112,8 +114,8 @@ public class ${ClassName}Controller{
 
     /**
      * 删除
-     * @param list
-     * @return
+     * @param list 删除ids
+     * @return ResponseBean
      */
     @PostMapping("/deletes")
     public ResponseBean deletes(@RequestBody List<String> list) {
@@ -123,8 +125,8 @@ public class ${ClassName}Controller{
 
     /**
      * 保存或更新
-     * @param model
-     * @return
+     * @param model 实体信息
+     * @return  ResponseBean
      */
     private ResponseBean saveOrUpdate(${ClassName} model) {
     <#if category?? && category=='curd_many'&& (table.childList?size>0)>

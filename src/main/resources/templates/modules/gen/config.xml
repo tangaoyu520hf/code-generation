@@ -29,6 +29,7 @@
 		<category value="service" label="服务层+持久层（service/dao/entity/mapper）">
 			<template>curd/service.xml</template>
 			<template>curd/serviceImpl.xml</template>
+			<template>curd/modelMapper.xml</template>
 			<template>category-ref:dao</template>
 		</category>
 <!--		<category value="treeTable" label="树结构表（一体）">
