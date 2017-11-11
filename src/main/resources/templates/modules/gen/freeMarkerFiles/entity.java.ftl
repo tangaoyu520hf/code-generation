@@ -31,9 +31,9 @@ public class ${ClassName} <#--extends Model<${ClassName}>--> {
     <#if table.tableColumnPk?? && table.tableColumnPk.name == c.name>
     @TableId("${c.name}")
     <#-- 其它字段 -->
-    <#elseif "createTime" == c.simpleJavaField || "createId" == c.simpleJavaField>
+    <#elseif "createTime" == c.simpleJavaField || "createId" == c.simpleJavaField || "createBy" == c.simpleJavaField  >
     @TableField(value = "${c.name}", fill = FieldFill.INSERT)
-    <#elseif "updateTime" == c.simpleJavaField || "updateId" == c.simpleJavaField>
+    <#elseif "updateTime" == c.simpleJavaField || "updateId" == c.simpleJavaField || "modifyBy" == c.simpleJavaField || "modifyTime" == c.simpleJavaField>
     @TableField(value = "${c.name}", fill = FieldFill.UPDATE)
     <#else>
    <#-- @TableField("${c.name}")-->
@@ -44,7 +44,7 @@ public class ${ClassName} <#--extends Model<${ClassName}>--> {
     @${a}
     </#list>
     </#if>
-    <#if "is_delete" == c.name>
+    <#if "is_delete" == c.name || "deleted" == c.name>
     @TableLogic
     </#if>
     private ${c.simpleJavaType} ${c.simpleJavaField};

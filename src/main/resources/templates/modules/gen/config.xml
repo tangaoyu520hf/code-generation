@@ -105,6 +105,10 @@
 		<dict value="createId" label="createId" />
 		<dict value="deleteFlag" label="deleteFlag" />
 		<dict value="isDelete" label="isDelete" />
+		<dict value="modifyTime" label="modifyTime" />
+		<dict value="modifyBy" label="modifyBy" />
+		<dict value="createBy" label="createBy" />
+		<dict value="deleted" label="deleted" />
 	</baseColumn>
 
 </config>
