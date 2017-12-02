@@ -94,7 +94,7 @@ public class GenUtils {
 			column.setJavaField(StringUtils.toCamelCase(column.getName()));
 
 
-			genTable.getPkList().contains(column.getName())
+			genTable.getPkList().contains(column.getName());
 			// 是否是主键
 			column.setIsPk(genTable.getPkList().contains(column.getName())?"1":"0");
 
