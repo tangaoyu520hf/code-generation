@@ -2,7 +2,7 @@
 <template>
 	<name>model</name>
 	<filePath>src/main/java/${packageName}/${moduleName}/service/dto</filePath>
-	<fileName>${ClassName}Dto.java</fileName>
+	<fileName>${ClassName}DTO.java</fileName>
 	<content></content>
 	<contentPath>templates/modules/gen/freeMarkerFiles/entityDto.java.ftl</contentPath>
 </template>

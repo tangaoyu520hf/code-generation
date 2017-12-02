@@ -3,6 +3,9 @@ package ${packageName}.${moduleName}.web.vo;
 <#list table.importList as i>
 import ${i};
 </#list>
+<#if isLombok>
+import lombok.Data;
+</#if>
 /**
 * <p>
 * ${functionName}
@@ -10,18 +13,21 @@ import ${i};
 * @author ${functionAuthor}
 * @date ${functionVersion}
 */
-public class ${ClassName}Dto <#--extends Model<${ClassName}>--> {
+<#if isLombok>
+@Data
+</#if>
+public class ${ClassName}VO <#--extends Model<${ClassName}>--> {
 
 <#-- 生成字段属性 -->
 <#list table.columnList as c>
 
+    <#-- 公共字段不需要生成 -->
+    <#if c.isNotBaseField >
     <#if c.comments??>
     /**
     * ${c.comments}
     */
     </#if>
-    <#-- 公共字段不需要生成 -->
-    <#if c.isNotBaseField >
     <#-- 校验 主键不需要加校验 -->
     <#if table.tableColumnPk?? && table.tableColumnPk.name != c.name >
     <#list c.simpleAnnotationList as a>
@@ -52,6 +58,7 @@ public class ${ClassName}Dto <#--extends Model<${ClassName}>--> {
 <#list table.childList as c>
 private List<${c.className?cap_first}> ${c.className?uncap_first}List = null;		// 子表列表
 </#list>
+<#if !isLombok>
 <#-- 生成get和set方法 -->
 <#list table.columnList as c>
 
@@ -132,6 +139,7 @@ private List<${c.className?cap_first}> ${c.className?uncap_first}List = null;		/
         this.${c.className?uncap_first}List = ${c.className?uncap_first}List;
     }
 </#list>
+</#if>
 
 
 <#--<#if table.tableColumnPk??>

@@ -1,5 +1,5 @@
 package ${packageName}.${moduleName}.web;
-import com.icss.cloud.common.model.ResponseBean;
+import com.sendinfo.core.model.ResponseBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 

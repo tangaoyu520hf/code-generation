@@ -2,7 +2,7 @@
 <template>
 	<name>model</name>
 	<filePath>src/main/java/${packageName}/${moduleName}/web/vo</filePath>
-	<fileName>${ClassName}Vo.java</fileName>
+	<fileName>${ClassName}VO.java</fileName>
 	<content></content>
 	<contentPath>templates/modules/gen/freeMarkerFiles/entityVo.java.ftl</contentPath>
 </template>

@@ -55,6 +55,7 @@ public class GenUtils {
 				column.setComments(column.getName());
 			}
 			column.setJavaType(iTypeConvert.processTypeConvert(column.getJdbcType()).getPkg());
+			column.setGenTable(genTable);
 
 /*
 
@@ -176,8 +177,8 @@ public class GenUtils {
 			}
 			// 父级ID
 			if (StringUtils.equalsIgnoreCase(column.getName(), "parent_id")){
-				column.setJavaType("This");
-				column.setJavaField("parent.id|name");
+/*				column.setJavaType("This");
+				column.setJavaField("parent.id|name");*/
 				column.setShowType("treeselect");
 			}
 			// 所有父级ID
@@ -331,6 +332,8 @@ public class GenUtils {
 	public static Map<String, Object> getDataModel(GenScheme genScheme){
 		Map<String, Object> model = new HashMap<>();
 
+		// 是否lombok生成
+		model.put("isLombok", true);
 		model.put("packageName", StringUtils.lowerCase(genScheme.getPackageName()));
 		model.put("lastPackageName", StringUtils.substringAfterLast((String)model.get("packageName"),"."));
 		model.put("moduleName", StringUtils.lowerCase(genScheme.getModuleName()));
