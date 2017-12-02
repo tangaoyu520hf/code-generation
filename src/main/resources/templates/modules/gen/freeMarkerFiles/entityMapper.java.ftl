@@ -1,6 +1,6 @@
 package ${packageName}.${moduleName}.service.mapper;
 
-import ${packageName}.${moduleName}.service.dto.${ClassName}Dto;
+import ${packageName}.${moduleName}.service.dto.${ClassName}DTO;
 import ${packageName}.${moduleName}.model.${ClassName};
 import org.mapstruct.Mapper;
 /**
@@ -12,8 +12,8 @@ import org.mapstruct.Mapper;
 public interface ${ClassName}Mapper {
     /**
      * DTO转换成POJO
-     * @param ${className}Dto ${className}Dto
+     * @param ${className}DTO ${className}DTO
      * @return ${ClassName}
      */
-    ${ClassName} ${className}DTOTo${ClassName}(${ClassName}Dto ${className}Dto);
+    ${ClassName} ${className}DTOTo${ClassName}(${ClassName}DTO ${className}DTO);
 }

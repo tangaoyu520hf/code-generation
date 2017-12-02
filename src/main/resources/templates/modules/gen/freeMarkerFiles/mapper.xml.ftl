@@ -23,7 +23,7 @@
 </#if>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-	${table.fieldNames}
+		${table.fieldNames}
     </sql>
 
     <!-- 通用複雜查询结果语句 -->
@@ -40,14 +40,14 @@
 		<if test="ew!=null">
 			<if test="ew.entity!=null">
 			<#list table.columnList as c>
-				<#if "is_delete" != c.name>
+				<#if c.isNotBaseField>
 				<if test="ew.entity.${c.simpleJavaField} !=null and ew.entity.${c.simpleJavaField} != ''"> AND mt.${c.name} ${c.queryConditionByType}</if>
 				</#if>
 			</#list>
 			</if>
 		</if>
 	<#list table.columnList as c>
-		<#if "is_delete" == c.name>
+		<#if "is_delete" == c.name ||  "deleted" == c.simpleJavaField>
 		AND mt.${c.name}= 'N'
 		</#if>
 	</#list>

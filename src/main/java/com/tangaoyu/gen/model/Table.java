@@ -9,7 +9,6 @@ import com.tangaoyu.gen.util.StringUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.*;
 
@@ -317,9 +316,9 @@ public class Table extends Model<Table> {
             for (int i = 0; i < columnList.size(); i++) {
                 TableColumn tableColumn = columnList.get(i);
                 if (i == columnList.size() - 1) {
-                    names.append(cov2col(tableColumn));
+                    names.append(cov2col(tableColumn, ""));
                 } else {
-                    names.append(cov2col(tableColumn)).append(", ");
+                    names.append(cov2col(tableColumn,","));
                 }
             }
         }
@@ -342,11 +341,12 @@ public class Table extends Model<Table> {
      * mapper xml中的字字段添加as
      *
      * @param field 字段实体
+     * @param s
      * @return 转换后的信息
      */
-    private String cov2col(TableColumn field) {
+    private String cov2col(TableColumn field, String s) {
         if (null != field) {
-            return field.getName() + " AS " + field.getSimpleJavaField();
+            return "mt." + field.getName() + " AS " + field.getSimpleJavaField() + s + "\r\n\t\t";
         }
         return "";
     }
