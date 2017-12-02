@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 中软国际科技服务（湖南）有限公司
- * FileName: ${ClassName}Service.java
- * Author:   ${functionAuthor}
- * Date:     ${functionVersion}
- */
 package ${packageName}.${moduleName}.service;
 import ${packageName}.${moduleName}.model.${ClassName};
 import ${superServiceClassPackage};

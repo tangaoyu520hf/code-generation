@@ -1,9 +1,3 @@
-/*
-* Copyright (c) 中软国际科技服务（湖南）有限公司
-* FileName: ${ClassName}Controller.java
-* Author:   ${functionAuthor}
-* Date:     ${functionVersion}
-*/
 package ${packageName}.${moduleName}.web;
 import com.icss.cloud.common.model.ResponseBean;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -26,9 +26,9 @@ public class GenUtils {
 
 	private static Logger logger = LoggerFactory.getLogger(GenUtils.class);
 
-	public static final String SUPERD_MAPPER_CLASS = "com.icss.cloud.common.mapper.IBaseMapperMapper";
-	public static final String SUPERD_SERVICE_CLASS = "com.icss.cloud.common.service.BaseService";
-	public static final String SUPERD_SERVICEIMPL_CLASS = "com.icss.cloud.common.service.impl.BaseServiceImpl";
+	public static final String SUPERD_MAPPER_CLASS = "com.sendinfo.core.mapper.IBaseMapper";
+	public static final String SUPERD_SERVICE_CLASS = "com.sendinfo.core.service.BaseService";
+	public static final String SUPERD_SERVICEIMPL_CLASS = "com.sendinfo.core.service.impl.BaseServiceImpl";
 
 	private static GenConfig genConfig;
 	private static ITypeConvert iTypeConvert;
@@ -92,7 +92,9 @@ public class GenUtils {
 			
 			// 设置java字段名
 			column.setJavaField(StringUtils.toCamelCase(column.getName()));
-			
+
+
+			genTable.getPkList().contains(column.getName())
 			// 是否是主键
 			column.setIsPk(genTable.getPkList().contains(column.getName())?"1":"0");
 

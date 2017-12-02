@@ -1,10 +1,4 @@
-/*
-* Copyright (c) 中软国际科技服务（湖南）有限公司
-* FileName: ${ClassName}Dto.java
-* Author:   ${functionAuthor}
-* Date:     ${functionVersion}
-*/
-package ${packageName}.${moduleName}.model.dto;
+package ${packageName}.${moduleName}.service.dto;
 
 <#list table.importList as i>
 import ${i};

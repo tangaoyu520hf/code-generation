@@ -1,12 +1,6 @@
-/*
-* Copyright (c) 中软国际科技服务（湖南）有限公司
-* FileName: ${ClassName}Mapper.java
-* Author:   ${functionAuthor}
-* Date:     ${functionVersion}
-*/
 package ${packageName}.${moduleName}.service.mapper;
 
-import ${packageName}.${moduleName}.model.dto.${ClassName}Dto;
+import ${packageName}.${moduleName}.service.dto.${ClassName}Dto;
 import ${packageName}.${moduleName}.model.${ClassName};
 import org.mapstruct.Mapper;
 /**

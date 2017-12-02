@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template>
 	<name>model</name>
-	<filePath>src/main/java/${packageName}/${moduleName}/model/vo</filePath>
+	<filePath>src/main/java/${packageName}/${moduleName}/web/vo</filePath>
 	<fileName>${ClassName}Vo.java</fileName>
 	<content></content>
 	<contentPath>templates/modules/gen/freeMarkerFiles/entityVo.java.ftl</contentPath>

@@ -277,10 +277,11 @@ public class Table extends Model<Table> {
 			}
 			//如果包含基础类型字段 则导入忽略
 			if (GenUtils.isBaseColumn(column.getSimpleJavaField())){
-				if(column.getSimpleJavaField().equalsIgnoreCase("isDelete")){
-					importList.add("com.baomidou.mybatisplus.annotations.TableLogic;");
+				if(column.getSimpleJavaField().equalsIgnoreCase("isDelete")
+						|| column.getSimpleJavaField().equalsIgnoreCase("deleted")){
+					importList.add("com.baomidou.mybatisplus.annotations.TableLogic");
 				}else{
-					importList.add("com.baomidou.mybatisplus.enums.FieldFill;");
+					importList.add("com.baomidou.mybatisplus.enums.FieldFill");
 				}
 			}
 			/*}*/

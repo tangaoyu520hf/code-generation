@@ -1,9 +1,3 @@
-/*
-* Copyright (c) 中软国际科技服务（湖南）有限公司
-* FileName: ${ClassName}.java
-* Author:   ${functionAuthor}
-* Date:     ${functionVersion}
-*/
 package ${packageName}.${moduleName}.model;
 
 <#list table.importList as i>
@@ -44,7 +38,7 @@ public class ${ClassName} <#--extends Model<${ClassName}>--> {
     @${a}
     </#list>
     </#if>
-    <#if "is_delete" == c.name || "deleted" == c.name>
+    <#if "isDelete" == c.simpleJavaField || "deleted" == c.simpleJavaField>
     @TableLogic
     </#if>
     private ${c.simpleJavaType} ${c.simpleJavaField};
