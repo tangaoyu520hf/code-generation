@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>viewForm</name>
+	<filePath>src/main/webapp/WEB-INF/views/${lastPackageName}/${moduleName}</filePath>
+	<fileName>${className}.js</fileName>
+	<contentPath>templates/modules/gen/freeMarkerFiles/i18n.js.ftl</contentPath>
+	<content>
+	</content>
+</template>
