@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.sendinfo.core.model.Pager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import java.util.List;
  * @date ${functionVersion}
  */
 @RestController
-@RequestMapping("/${table.className?uncap_first}")
+@RequestMapping("/api/${table.className?uncap_first}")
 public class ${ClassName}Controller{
    /**
    * 日志打印
@@ -48,9 +48,9 @@ public class ${ClassName}Controller{
      * @return ResponseBean
      */
     @GetMapping("/page")
-    public ResponseBean page(${ClassName} model,Page page) {
+    public ResponseBean page(${ClassName} model,Pager page) {
         EntityWrapper<${ClassName}> entityWrapper = new EntityWrapper<>(model);
-        Page<${ClassName}> rs = this.baseService.selectComplexPage(page, entityWrapper);
+        Pager<${ClassName}> rs = this.baseService.selectComplexPage(page, entityWrapper);
         ResponseBean responseBean = new ResponseBean(rs);
         return responseBean;
     }

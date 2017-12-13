@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.sendinfo.core.model.DataEntity;
 <#if isLombok>
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 </#if>
 <#list table.importList as i>
 import ${i};
@@ -19,6 +21,8 @@ import ${i};
 @TableName("${table.name}")
 <#if isLombok>
 @Data
+@EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
 </#if>
 public class ${ClassName} extends DataEntity<${ClassName}> {
 

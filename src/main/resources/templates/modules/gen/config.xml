@@ -80,9 +80,9 @@
 		<dict value="&lt;" label="&lt;" process="&lt; #'{'{0}'}'" />
 		<dict value="&lt;=" label="&lt;=" process="&lt;= #'{'{0}'}'" />
 		<dict value="between" label="Between" process="= #'{'{0}'}'" />
-		<dict value="like" label="Like" process=" LIKE CONCAT('%',#'{'{0}'}','%' ) " />
-		<dict value="left_like" label="Left Like" process=" LIKE CONCAT('%',#'{'{0}'}' ) " />
-		<dict value="right_like" label="Right Like" process=" LIKE CONCAT(#'{'{0}'}','%' ) " />
+		<dict value="like" label="Like" process=" LIKE CONCAT(''%'',#'{'{0}'}',''%'' ) " />
+		<dict value="left_like" label="Left Like" process=" LIKE CONCAT(''%'',#'{'{0}'}' ) " />
+		<dict value="right_like" label="Right Like" process=" LIKE CONCAT(#'{'{0}'}',''%'' ) " />
 	</queryType>
 	<!-- 字段显示类型 -->
 	<showType>

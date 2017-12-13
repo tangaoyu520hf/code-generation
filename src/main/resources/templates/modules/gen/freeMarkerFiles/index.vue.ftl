@@ -87,7 +87,6 @@
     </#list>
     }
     export default {
-        name: 'corp',
         data() {
             return {
                 dataList: [],
@@ -148,7 +147,7 @@
                     ...this.paginations.searchData,
                     ...this.orders
                 };
-                this.$http.get('/corp/page', {params: data}).then(response => {
+                this.$http.get('/api/${table.className?uncap_first}/page', {params: data}).then(response => {
                     this.dataList = response.data.records;
                     this.paginations.total = response.data.total;
                     this.listLoading = false;
@@ -187,7 +186,7 @@
             createData() {
                 this.$refs['dataForm'].validate((valid) => {
                     if (valid) {
-                        this.$http.post('/corp/add', this.formData, {isNotify: true}).then(() => {
+                        this.$http.post('/api/${table.className?uncap_first}/add', this.formData, {isNotify: true}).then(() => {
                             this.dialogFormVisible = false;
                             this.getList();
                         });
@@ -205,7 +204,7 @@
             updateData() {
                 this.$refs['dataForm'].validate((valid) => {
                     if (valid) {
-                        this.$http.post('/corp/update', this.formData).then(() => {
+                        this.$http.post('/api/${table.className?uncap_first}/update', this.formData).then(() => {
                             this.dialogFormVisible = false
                             this.dataList.forEach((obj, index) => {
                                 if (obj.id == this.formData.id) {
@@ -225,7 +224,7 @@
                     const ids = rows.map((item) => {
                         return item.id;
                     });
-                    this.$http.post('/corp/deletes', ids).then(() => {
+                    this.$http.post('/api/${table.className?uncap_first}/deletes', ids).then(() => {
                         this.getList();
                     });
                 }).catch(() => {
