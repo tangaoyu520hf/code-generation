@@ -48,7 +48,7 @@
 		</if>
 	<#list table.columnList as c>
 		<#if "is_delete" == c.name ||  "deleted" == c.simpleJavaField>
-		AND mt.${c.name}= 'N'
+		AND mt.${c.name}= 'F'
 		</#if>
 	</#list>
 		<if test="ew!=null">
