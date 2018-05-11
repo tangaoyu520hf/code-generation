@@ -11,7 +11,6 @@ import com.tangaoyu.gen.service.TableColumnService;
 import com.tangaoyu.gen.service.TableService;
 import com.tangaoyu.gen.util.GenUtils;
 import com.tangaoyu.gen.util.StringUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,6 +68,9 @@ public class TableServiceImpl extends ServiceImpl<TableDao, Table> implements Ta
                     e.setDelFlag(TableColumn.DEL_FLAG_DELETE);
                 }
             }
+/*            List<TableColumn> realColumnList = table.getColumnList().stream().filter(tableColumn -> !tableColumn.getDelFlag().equals(TableColumn.DEL_FLAG_DELETE)).collect(Collectors.toList());
+            table.setColumnList(realColumnList);*/
+
             // 初始化列属性字段
             GenUtils.initColumnField(table);
 

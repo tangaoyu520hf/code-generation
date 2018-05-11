@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ${packageName}.${moduleName}.model.${ClassName};
+import ${packageName}.${moduleName}.service.dto.${ClassName}DTO;
+import ${packageName}.${moduleName}.service.mapper.${ClassName}Mapper;
 import ${packageName}.${moduleName}.service.${ClassName}Service;
 
 import java.util.List;
@@ -34,6 +36,9 @@ public class ${ClassName}Controller{
    @Autowired
    private ${ClassName}Service baseService;
 
+   @Autowired
+   private ${ClassName}Mapper ${ClassName?uncap_first}Mapper;
+
     <#if category ?? && category=='curd_many' && (table.childList?size>0)>
     <#list table.childList as c>
     @Autowired
@@ -51,8 +56,7 @@ public class ${ClassName}Controller{
     public ResponseBean page(${ClassName} model,Pager page) {
         EntityWrapper<${ClassName}> entityWrapper = new EntityWrapper<>(model);
         Pager<${ClassName}> rs = this.baseService.selectComplexPage(page, entityWrapper);
-        ResponseBean responseBean = new ResponseBean(rs);
-        return responseBean;
+        return ResponseBean.ok().body(rs);
     }
 
     /**
@@ -71,9 +75,9 @@ public class ${ClassName}Controller{
         </#list>
         </#if>
         if(null==model){
-            return new ResponseBean("IsNotExist","该数据不存在");
+            return ResponseBean.badRequest("该数据不存在").build();
         }
-        return new ResponseBean(model);
+        return ResponseBean.ok().body(model);
     }
 
     /**
@@ -88,21 +92,23 @@ public class ${ClassName}Controller{
 
     /**
      * 新增
-     * @param model 实体信息
+     * @param dto 实体信息
      * @return ResponseBean
      */
-    @PostMapping("/add")
-    public ResponseBean add(@Validated @RequestBody ${ClassName} model) {
+    @PostMapping
+    public ResponseBean add(@Validated @RequestBody ${ClassName}DTO dto) {
+        ${ClassName} model = ${ClassName?uncap_first}Mapper.${className}DTOTo${ClassName}(dto);
         return saveOrUpdate(model);
     }
 
     /**
      * 更新
-     * @param model 实体信息
+     * @param dto 实体信息
      * @return ResponseBean
      */
-    @PostMapping("/update")
-    public ResponseBean update(@Validated @RequestBody ${ClassName} model) {
+    @PutMapping
+    public ResponseBean update(@Validated @RequestBody ${ClassName}DTO dto) {
+        ${ClassName} model = ${ClassName?uncap_first}Mapper.${className}DTOTo${ClassName}(dto);
         return saveOrUpdate(model);
     }
 
@@ -111,10 +117,10 @@ public class ${ClassName}Controller{
      * @param list 删除ids
      * @return ResponseBean
      */
-    @PostMapping("/deletes")
+    @DeleteMapping
     public ResponseBean deletes(@RequestBody List<String> list) {
         boolean batchIds = this.baseService.deleteBatchIds(list);
-        return new ResponseBean();
+        return ResponseBean.ok().build();
     }
 
     /**
@@ -128,7 +134,7 @@ public class ${ClassName}Controller{
     <#else >
         boolean success = this.baseService.insertOrUpdate(model);
     </#if >
-        return new ResponseBean();
+        return ResponseBean.ok().build();
     }
 
 

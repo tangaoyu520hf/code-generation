@@ -70,7 +70,7 @@
 </template>
 
 <script>
-    import constant from '@/core/util/constant'
+    import constant from 'sendinfo-admin-ui/src/core/util/constant'
 
     const tempformData = {
     <#list table.columnList as c>
@@ -186,7 +186,7 @@
             createData() {
                 this.$refs['dataForm'].validate((valid) => {
                     if (valid) {
-                        this.$http.post('/api/${table.className?uncap_first}/add', this.formData, {isNotify: true}).then(() => {
+                        this.$http.post('/api/${table.className?uncap_first}', this.formData, {isNotify: true}).then(() => {
                             this.dialogFormVisible = false;
                             this.getList();
                         });
@@ -204,7 +204,7 @@
             updateData() {
                 this.$refs['dataForm'].validate((valid) => {
                     if (valid) {
-                        this.$http.post('/api/${table.className?uncap_first}/update', this.formData).then(() => {
+                        this.$http.put('/api/${table.className?uncap_first}', this.formData).then(() => {
                             this.dialogFormVisible = false
                             this.dataList.forEach((obj, index) => {
                                 if (obj.id == this.formData.id) {
@@ -224,7 +224,7 @@
                     const ids = rows.map((item) => {
                         return item.id;
                     });
-                    this.$http.post('/api/${table.className?uncap_first}/deletes', ids).then(() => {
+                    this.$http.delete('/api/${table.className?uncap_first}', {data:ids}).then(() => {
                         this.getList();
                     });
                 }).catch(() => {

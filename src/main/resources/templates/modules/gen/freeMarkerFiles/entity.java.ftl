@@ -47,14 +47,17 @@ public class ${ClassName} extends DataEntity<${ClassName}> {
    <#-- @TableField("${c.name}")-->
     </#if>
     <#-- 校验 主键及公共字段不需要加校验 -->
-    <#if table.tableColumnPk?? && table.tableColumnPk.name != c.name >
+<#--    <#if table.tableColumnPk?? && table.tableColumnPk.name != c.name >
     <#list c.simpleAnnotationList as a>
     @${a}
     </#list>
-    </#if>
+    </#if>-->
 <#--    <#if "isDelete" == c.simpleJavaField || "deleted" == c.simpleJavaField>
     @TableLogic
     </#if>-->
+    <#if "Date" == c.simpleJavaType>
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    </#if>
     private ${c.simpleJavaType} ${c.simpleJavaField};
     </#if>
 </#list>

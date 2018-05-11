@@ -29,11 +29,11 @@ public class ${ClassName}VO <#--extends Model<${ClassName}>--> {
     */
     </#if>
     <#-- 校验 主键不需要加校验 -->
-    <#if table.tableColumnPk?? && table.tableColumnPk.name != c.name >
+<#--    <#if table.tableColumnPk?? && table.tableColumnPk.name != c.name >
     <#list c.simpleAnnotationList as a>
     @${a}
     </#list>
-    </#if>
+    </#if>-->
     <#if "Date" == c.simpleJavaType>
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     </#if>
