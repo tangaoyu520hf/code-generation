@@ -19,8 +19,14 @@ public class MySqlTypeConvert implements ITypeConvert {
             return DbColumnType.LONG;
         } else if (t.contains("int")) {
             return DbColumnType.INTEGER;
-        } else if (t.contains("date") || t.contains("time") || t.contains("year")) {
+        } else if (t.contains("year")) {
             return DbColumnType.DATE;
+        } else if (t.equalsIgnoreCase("time")) {
+            return DbColumnType.LOCAL_TIME;
+        } else if (t.equalsIgnoreCase("date")) {
+            return DbColumnType.LOCAL_DATE;
+        } else if (t.equalsIgnoreCase("datetime")) {
+            return DbColumnType.LOCAL_DATE_TIME;
         } else if (t.contains("text")) {
             return DbColumnType.STRING;
         } else if (t.contains("bit")) {

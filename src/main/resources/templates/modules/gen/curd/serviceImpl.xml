@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template>
 	<name>serviceImpl</name>
-	<filePath>src/main/java/${packageName}/${moduleName}/service/impl</filePath>
+	<filePath>src/main/java/${packageName}/${moduleName}/${bizModuleName}/service/impl</filePath>
 	<fileName>${ClassName}ServiceImpl.java</fileName>
 	<content></content>
 	<contentPath>templates/modules/gen/freeMarkerFiles/serviceImpl.java.ftl</contentPath>

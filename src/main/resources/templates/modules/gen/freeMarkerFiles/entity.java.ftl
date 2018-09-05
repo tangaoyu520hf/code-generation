@@ -1,8 +1,8 @@
-package ${packageName}.${moduleName}.model;
+package ${packageName}.${moduleName}${pkgBizModuleName}.model;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.sendinfo.core.model.DataEntity;
+import com.sendinfo.framework.boot.model.BaseDataEntity;
 <#if isLombok>
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,7 +24,7 @@ import ${i};
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 </#if>
-public class ${ClassName} extends DataEntity<${ClassName}> {
+public class ${ClassName} extends BaseDataEntity {
 
 <#-- 生成字段属性 -->
 <#list table.columnList as c>

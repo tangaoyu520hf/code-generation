@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="filter-container">
-            <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="企业名称"
+            <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="名称"
                       v-model="paginations.searchData.name">
             </el-input>
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
@@ -49,16 +49,18 @@
         </div>
 
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-            <el-form :rules="rules" ref="dataForm" :model="formData" label-position="left" label-width="80px"
-                     style='width: 400px; margin-left:50px;'>
+            <el-form :rules="rules" ref="dataForm" :model="formData" label-position="left" label-width="120px">
             <#list table.columnList as c>
                 <#if c.isNotBaseField >
-                    <el-form-item :label="labels.${c.simpleJavaField}" prop="${c.simpleJavaField}">
-                        <el-input v-model="formData.${c.simpleJavaField}"></el-input>
-                    </el-form-item>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item :label="labels.${c.simpleJavaField}" prop="${c.simpleJavaField}">
+                                <el-input v-model="formData.${c.simpleJavaField}"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                 </#if>
             </#list>
-
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -70,178 +72,130 @@
 </template>
 
 <script>
-    import constant from 'sendinfo-admin-ui/src/core/util/constant'
+import paginations  from 'sendinfo-admin-ui/src/core/plugins/mixins/paginations.js'
+import constantMixin from 'sendinfo-admin-ui/src/core/plugins/mixins/constant-mixins.js'
+import constant from 'sendinfo-admin-ui/src/core/util/constant'
 
-    const tempformData = {
-    <#list table.columnList as c>
-        <#if c.isNotBaseField >
-        ${c.simpleJavaField}: '',
-        </#if >
-    </#list>
-    }
-    const tempLabels = {
-    <#list table.columnList as c>
-        <#if c.isNotBaseField >
-        ${c.simpleJavaField}: '<#if c.comments??>${c.comments}</#if>',
-        </#if>
-    </#list>
-    }
-    export default {
-        data() {
-            return {
-                dataList: [],
-                deleteRows: [],
-                formData: Object.assign({}, tempformData), // copy obj
-                labels: tempLabels,
-                rules: {
-                    <#list table.columnList as c>
-                    <#if c.isNotBaseField >
-                    ${c.simpleJavaField}: [
-                    <#-- 校验 主键及公共字段不需要加校验 -->
-                    <#if table.tableColumnPk?? && table.tableColumnPk.name != c.name >
-                        <#list c.rulesList as a>
-                        ${a},
-                        </#list>
-                    </#if>
-                    ],
-                    </#if>
+const tempformData = {
+<#list table.columnList as c>
+    <#if c.isNotBaseField >
+    ${c.simpleJavaField}: '',
+    </#if >
+</#list>
+}
+const tempLabels = {
+<#list table.columnList as c>
+    <#if c.isNotBaseField >
+    ${c.simpleJavaField}: '<#if c.comments??>${c.comments}</#if>',
+    </#if>
+</#list>
+}
+export default {
+    created() {
+        this.getListData()
+    },
+    dictOptions: {
+    },
+    name:'${table.className?uncap_first}',
+    mixins: [paginations,constantMixin],
+    data() {
+        return {
+            uri:'/api/${table.className?uncap_first}',
+            formData: Object.assign({}, tempformData), // copy obj
+            labels: tempLabels,
+            rules: {
+                <#list table.columnList as c>
+                <#if c.isNotBaseField >
+                ${c.simpleJavaField}: [
+                <#-- 校验 主键及公共字段不需要加校验 -->
+                <#if table.tableColumnPk?? && table.tableColumnPk.name != c.name >
+                    <#list c.rulesList as a>
+                    ${a},
                     </#list>
-                },
-                //需要给分页组件传的信息
-                paginations: {
-                    currentPage: 1,
-                    total: 0,
-                    pageSize: 10,
-                    pageSizes: [10, 20, 30, 50],
-                    layout: 'total, sizes, prev, pager, next, jumper',
-                    searchData: {
-                        name: null,
-                        code: ''
-                    },
-                },
-                orders: {
-                    order: '',
-                    orderByField: ''
-                },
-                listLoading: true,
-                dialogFormVisible: false,
-                dialogStatus: '',
-                textMap: {
-                    update: '编辑',
-                    create: '创建'
-                },
-                dialogPvVisible: false,
-                pvData: [],
+                </#if>
+                ],
+                </#if>
+                </#list>
+            },
+            //需要给分页组件传的信息
+            paginations: {
+                searchData: {
+                    name: null,
+                    code: ''
+                }
+            },
+            dialogFormVisible: false,
+            dialogStatus: '',
+            textMap: {
+                update: '编辑',
+                create: '创建'
+            }
 
-            }
+        }
+    },
+    methods: {
+        resetFormData() {
+            this.formData = Object.assign({}, tempformData);
         },
-        created() {
-            this.getList()
+        handleCreate() {
+            this.resetFormData()
+            this.dialogStatus = 'create'
+            this.dialogFormVisible = true
+            this.$nextTick(() => {
+                this.$refs['dataForm'].clearValidate()
+            })
         },
-        methods: {
-            getList() {
-                this.listLoading = true;
-                const data = {
-                    current: this.paginations.currentPage,
-                    size: this.paginations.pageSize,
-                    ...this.paginations.searchData,
-                    ...this.orders
-                };
-                this.$http.get('/api/${table.className?uncap_first}/page', {params: data}).then(response => {
-                    this.dataList = response.data.records;
-                    this.paginations.total = response.data.total;
-                    this.listLoading = false;
+        createData() {
+            this.$refs['dataForm'].validate((valid) => {
+                if (valid) {
+                    this.$http.post(this.uri, this.formData, {isNotify: true}).then(() => {
+                        this.dialogFormVisible = false;
+                        this.getListData();
+                    });
+                }
+            })
+        },
+        handleUpdate(row) {
+            this.formData = Object.assign({}, row) // copy obj
+            this.dialogStatus = 'update'
+            this.dialogFormVisible = true
+            this.$nextTick(() => {
+                this.$refs['dataForm'].clearValidate()
+            })
+        },
+        updateData() {
+            this.$refs['dataForm'].validate((valid) => {
+                if (valid) {
+                    this.$http.put(this.uri, this.formData).then(() => {
+                        this.dialogFormVisible = false
+                        this.dataList.forEach((obj, index) => {
+                            if (obj.id == this.formData.id) {
+                                this.$set(this.dataList, index, this.formData)
+                            }
+                        });
+                    });
+                }
+            })
+        },
+        handleDelete(rows) {
+            this.$confirm('是否确认删除？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                const ids = rows.map((item) => {
+                    return item.id;
                 });
-            },
-            handleFilter() {
-                this.paginations.currentPage = 1
-                this.getList()
-            },
-            handleSizeChange(val) {
-                this.paginations.pageSize = val
-                this.getList()
-            },
-            handleCurrentChange(val) {
-                this.paginations.currentPage = val
-                this.getList()
-            },
-            handleModifyStatus(row, status) {
+                this.$http.delete(this.uri, {data:ids}).then(() => {
+                    this.getListData();
+                });
+            }).catch(() => {
                 this.$message({
-                    message: '操作成功',
-                    type: 'success'
-                })
-                row.status = status
-            },
-            resetFormData() {
-                this.formData = Object.assign({}, tempformData);
-            },
-            handleCreate() {
-                this.resetFormData()
-                this.dialogStatus = 'create'
-                this.dialogFormVisible = true
-                this.$nextTick(() => {
-                    this.$refs['dataForm'].clearValidate()
-                })
-            },
-            createData() {
-                this.$refs['dataForm'].validate((valid) => {
-                    if (valid) {
-                        this.$http.post('/api/${table.className?uncap_first}', this.formData, {isNotify: true}).then(() => {
-                            this.dialogFormVisible = false;
-                            this.getList();
-                        });
-                    }
-                })
-            },
-            handleUpdate(row) {
-                this.formData = Object.assign({}, row) // copy obj
-                this.dialogStatus = 'update'
-                this.dialogFormVisible = true
-                this.$nextTick(() => {
-                    this.$refs['dataForm'].clearValidate()
-                })
-            },
-            updateData() {
-                this.$refs['dataForm'].validate((valid) => {
-                    if (valid) {
-                        this.$http.put('/api/${table.className?uncap_first}', this.formData).then(() => {
-                            this.dialogFormVisible = false
-                            this.dataList.forEach((obj, index) => {
-                                if (obj.id == this.formData.id) {
-                                    this.$set(this.dataList, index, this.formData)
-                                }
-                            });
-                        });
-                    }
-                })
-            },
-            handleDelete(rows) {
-                this.$confirm('是否确认删除？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    const ids = rows.map((item) => {
-                        return item.id;
-                    });
-                    this.$http.delete('/api/${table.className?uncap_first}', {data:ids}).then(() => {
-                        this.getList();
-                    });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
+                    type: 'info',
+                    message: '已取消删除'
                 });
-            },
-            sortChange(column) {
-                this.orders.order = constant.ORDER[column.order];
-                this.orders.orderByField = column.prop;
-                this.getList();
-            },
-            handleSelectionChange(val) {
-                this.deleteRows = val;
-            }
+            });
         }
     }
+}
 </script>

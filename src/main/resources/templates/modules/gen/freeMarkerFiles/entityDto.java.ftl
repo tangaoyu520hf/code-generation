@@ -1,4 +1,4 @@
-package ${packageName}.${moduleName}.service.dto;
+package ${packageName}.${moduleName}${pkgBizModuleName}.service.dto;
 
 <#list table.importList as i>
 import ${i};

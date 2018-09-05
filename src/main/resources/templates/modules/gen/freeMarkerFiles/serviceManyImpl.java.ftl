@@ -1,8 +1,8 @@
-package ${packageName}.${moduleName}.service.impl;
+package ${packageName}.${moduleName}${pkgBizModuleName}.service.impl;
 
-import ${packageName}.${moduleName}.model.${ClassName};
-import ${packageName}.${moduleName}.dao.${ClassName}Dao;
-import ${packageName}.${moduleName}.service.${ClassName}Service;
+import ${packageName}.${moduleName}${pkgBizModuleName}.model.${ClassName};
+import ${packageName}.${moduleName}${pkgBizModuleName}.dao.${ClassName}Dao;
+import ${packageName}.${moduleName}${pkgBizModuleName}.service.${ClassName}Service;
 import ${superServiceImplClassPackage};
 import org.springframework.stereotype.Service;
 

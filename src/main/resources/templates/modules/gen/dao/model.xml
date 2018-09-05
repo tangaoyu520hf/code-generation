@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template>
 	<name>model</name>
-	<filePath>src/main/java/${packageName}/${moduleName}/model</filePath>
+	<filePath>src/main/java/${packageName}/${moduleName}/${bizModuleName}/model</filePath>
 	<fileName>${ClassName}.java</fileName>
 	<content></content>
 	<contentPath>templates/modules/gen/freeMarkerFiles/entity.java.ftl</contentPath>

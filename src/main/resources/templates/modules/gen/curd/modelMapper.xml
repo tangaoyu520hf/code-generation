@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template>
 	<name>controller</name>
-	<filePath>src/main/java/${packageName}/${moduleName}/service/mapper</filePath>
+	<filePath>src/main/java/${packageName}/${moduleName}/${bizModuleName}/service/mapper</filePath>
 	<fileName>${ClassName}Mapper.java</fileName>
 	<contentPath>templates/modules/gen/freeMarkerFiles/entityMapper.java.ftl</contentPath>
 </template>

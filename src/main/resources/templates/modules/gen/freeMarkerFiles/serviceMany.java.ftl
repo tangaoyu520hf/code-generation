@@ -1,5 +1,5 @@
-package ${packageName}.${moduleName}.service;
-import ${packageName}.${moduleName}.model.${ClassName};
+package ${packageName}.${moduleName}${pkgBizModuleName}.service;
+import ${packageName}.${moduleName}${pkgBizModuleName}.model.${ClassName};
 import ${superServiceClassPackage};
 
 /**

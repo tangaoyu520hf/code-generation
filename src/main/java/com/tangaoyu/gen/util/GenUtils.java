@@ -26,9 +26,9 @@ public class GenUtils {
 
 	private static Logger logger = LoggerFactory.getLogger(GenUtils.class);
 
-	public static final String SUPERD_MAPPER_CLASS = "com.sendinfo.core.mapper.IBaseMapper";
-	public static final String SUPERD_SERVICE_CLASS = "com.sendinfo.core.service.BaseService";
-	public static final String SUPERD_SERVICEIMPL_CLASS = "com.sendinfo.core.service.impl.BaseServiceImpl";
+	public static final String SUPERD_MAPPER_CLASS = "com.sendinfo.framework.boot.mapper.IBaseMapper";
+	public static final String SUPERD_SERVICE_CLASS = "com.sendinfo.framework.boot.service.BaseService";
+	public static final String SUPERD_SERVICEIMPL_CLASS = "com.sendinfo.framework.boot.service.impl.BaseServiceImpl";
 
 	private static GenConfig genConfig;
 	private static ITypeConvert iTypeConvert;
@@ -338,6 +338,8 @@ public class GenUtils {
 		model.put("lastPackageName", StringUtils.substringAfterLast((String)model.get("packageName"),"."));
 		model.put("moduleName", StringUtils.lowerCase(genScheme.getModuleName()));
 		model.put("subModuleName", StringUtils.lowerCase(genScheme.getSubModuleName()));
+		model.put("bizModuleName", "biz");
+		model.put("pkgBizModuleName", ".biz");
 		model.put("className", StringUtils.uncapitalize(genScheme.getGenTable().getClassName()));
 		model.put("ClassName", StringUtils.capitalize(genScheme.getGenTable().getClassName()));
 

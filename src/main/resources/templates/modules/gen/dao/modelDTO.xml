@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template>
 	<name>model</name>
-	<filePath>src/main/java/${packageName}/${moduleName}/service/dto</filePath>
+	<filePath>src/main/java/${packageName}/${moduleName}/${bizModuleName}/service/dto</filePath>
 	<fileName>${ClassName}DTO.java</fileName>
 	<content></content>
 	<contentPath>templates/modules/gen/freeMarkerFiles/entityDto.java.ftl</contentPath>

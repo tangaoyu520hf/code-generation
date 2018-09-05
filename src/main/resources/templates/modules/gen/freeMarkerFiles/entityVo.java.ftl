@@ -1,4 +1,4 @@
-package ${packageName}.${moduleName}.web.vo;
+package ${packageName}.${moduleName}${pkgBizModuleName}.web.vo;
 
 <#list table.importList as i>
 import ${i};

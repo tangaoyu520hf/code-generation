@@ -1,19 +1,19 @@
 package ${packageName}.${moduleName}.web;
-import com.sendinfo.core.model.ResponseBean;
+import com.sendinfo.framework.boot.model.Pager;
+import com.sendinfo.framework.core.model.ResponseBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.sendinfo.core.model.Pager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ${packageName}.${moduleName}.model.${ClassName};
-import ${packageName}.${moduleName}.service.dto.${ClassName}DTO;
-import ${packageName}.${moduleName}.service.mapper.${ClassName}Mapper;
-import ${packageName}.${moduleName}.service.${ClassName}Service;
+import ${packageName}.${moduleName}${pkgBizModuleName}.model.${ClassName};
+import ${packageName}.${moduleName}${pkgBizModuleName}.service.dto.${ClassName}DTO;
+import ${packageName}.${moduleName}${pkgBizModuleName}.service.mapper.${ClassName}Convert;
+import ${packageName}.${moduleName}${pkgBizModuleName}.service.${ClassName}Service;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class ${ClassName}Controller{
    private ${ClassName}Service baseService;
 
    @Autowired
-   private ${ClassName}Mapper ${ClassName?uncap_first}Mapper;
+   private ${ClassName}Convert ${ClassName?uncap_first}Convert;
 
     <#if category ?? && category=='curd_many' && (table.childList?size>0)>
     <#list table.childList as c>
@@ -97,7 +97,7 @@ public class ${ClassName}Controller{
      */
     @PostMapping
     public ResponseBean add(@Validated @RequestBody ${ClassName}DTO dto) {
-        ${ClassName} model = ${ClassName?uncap_first}Mapper.${className}DTOTo${ClassName}(dto);
+        ${ClassName} model = ${ClassName?uncap_first}Convert.${className}DTOTo${ClassName}(dto);
         return saveOrUpdate(model);
     }
 
@@ -108,7 +108,7 @@ public class ${ClassName}Controller{
      */
     @PutMapping
     public ResponseBean update(@Validated @RequestBody ${ClassName}DTO dto) {
-        ${ClassName} model = ${ClassName?uncap_first}Mapper.${className}DTOTo${ClassName}(dto);
+        ${ClassName} model = ${ClassName?uncap_first}Convert.${className}DTOTo${ClassName}(dto);
         return saveOrUpdate(model);
     }
 
@@ -132,7 +132,7 @@ public class ${ClassName}Controller{
     <#if category?? && category=='curd_many'&& (table.childList?size>0)>
         boolean success = this.baseService.saveOrUpdateAndChild(model);
     <#else >
-        boolean success = this.baseService.insertOrUpdate(model);
+        boolean success = this.baseService.saveOrUpdate(model);
     </#if >
         return ResponseBean.ok().build();
     }

@@ -1,7 +1,7 @@
-package ${packageName}.${moduleName}.service.mapper;
+package ${packageName}.${moduleName}${pkgBizModuleName}.service.mapper;
 
-import ${packageName}.${moduleName}.service.dto.${ClassName}DTO;
-import ${packageName}.${moduleName}.model.${ClassName};
+import ${packageName}.${moduleName}${pkgBizModuleName}.service.dto.${ClassName}DTO;
+import ${packageName}.${moduleName}${pkgBizModuleName}.model.${ClassName};
 import org.mapstruct.Mapper;
 /**
  *  ${functionName} 映射mapper
@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
  * @date ${functionVersion}
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface ${ClassName}Mapper {
+public interface ${ClassName}Convert {
     /**
      * DTO转换成POJO
      * @param ${className}DTO ${className}DTO
